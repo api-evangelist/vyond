@@ -1,0 +1,66 @@
+generated: '2026-08-05'
+method: searched
+source: https://api.vyond.com/doc/
+versioning:
+  scheme: uri-path
+  form: https://api.vyond.com/rest/{version}/{path}
+  current: v2
+  live: [v1, v2]
+  docs: https://api.vyond.com/doc/#tag/Introduction
+  document_version: 1.1.0
+  note: >-
+    v1 and v2 of content generation are both documented and both live. Vyond does
+    not state which is preferred, does not mark v1 deprecated, and gives no
+    migration guidance — the only observable difference is that v2 adds a readable
+    task (GET /rest/v2/generations/{id}) that v1 lacks. Turbo, video export,
+    parameters, user and webhooks are v1-only. SCIM is fixed at /scim/v2/ by the
+    SCIM 2.0 standard rather than by Vyond's version train.
+deprecation:
+  policy_url: null
+  policy_published: false
+  sunset_header: false
+  deprecation_header: false
+  rfc8594: false
+  note: >-
+    No deprecation policy, no Sunset/Deprecation header support, and no operation in
+    the OpenAPI carries `deprecated: true`. Nothing tells a consumer how much notice
+    they would get before v1 goes away.
+deprecated_operations: []
+sla:
+  url: null
+  uptime_target: null
+  note: >-
+    No public SLA or uptime commitment was found on vyond.com, the trust center, or
+    the API documentation.
+status_page: null
+status_page_evidence:
+  note: >-
+    No status page exists. status.vyond.com does not resolve. vyond.statuspage.io
+    and vyond.instatus.com each returned HTTP 200, but both are vendor marketing
+    catch-alls — byte-for-byte identical (127,698 and 216,836 bytes respectively)
+    to a control probe of a deliberately nonexistent tenant on the same vendor. A
+    200 is not evidence.
+  probes:
+  - {url: 'https://status.vyond.com', status: 0, result: DNS does not resolve}
+  - {url: 'https://vyond.statuspage.io', status: 200, result: 'soft-404 — identical to control tenant'}
+  - {url: 'https://vyond.instatus.com', status: 200, result: 'soft-404 — identical to control tenant'}
+changelog:
+  url: https://product.vyond.com/
+  feed: https://product.vyond.com/feed/
+  scope: product releases (application features and content library), not API changes
+  detail: changelog/vyond-changelog.yml
+  x-gap: >-
+    Vyond publishes a dated product changelog but no API changelog. Nothing in the
+    release feed announces API additions, and the OpenAPI carries no per-operation
+    version history.
+support:
+  help_center: https://help.vyond.com/hc/en-us
+  api_access_contact: support@vyond.com
+  note: >-
+    The API token page is currently hidden in the application; the Help Center
+    directs prospective API users to email support@vyond.com to have it enabled.
+x-evidence:
+  checked: '2026-08-05'
+  probes:
+  - {url: 'https://api.vyond.com/doc/openapi.json', status: 200}
+  - {url: 'https://product.vyond.com/feed', status: 200}

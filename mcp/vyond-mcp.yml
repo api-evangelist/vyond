@@ -1,0 +1,99 @@
+generated: '2026-08-05'
+method: derived
+status: candidate
+source: openapi/vyond-openapi-original.json
+search_result: >-
+  No official or community Model Context Protocol server for Vyond was found —
+  nothing in the Vyond documentation, nothing in the two (empty) Vyond GitHub
+  organizations, nothing in the MCP registry or npm. Probed
+  https://api.vyond.com/.well-known/agent-card.json and /.well-known/agent.json on
+  every Vyond host: 404 everywhere. The tool list below is a CANDIDATE derived
+  one-to-one from the published OpenAPI operations, not a server Vyond runs.
+server:
+  name: vyond
+  transport: null
+  url: null
+  published: false
+notes: >-
+  Vyond is an unusually good MCP candidate: the whole API is a small, coherent
+  create-a-video surface with async job resolution already modelled. The one thing
+  an MCP wrapper would need that Vyond does not provide is idempotency — every
+  generation and export spends credits, and there is no Idempotency-Key, so an
+  agent that retries on timeout double-spends. See conventions/vyond-conventions.yml.
+tools:
+- name: create_content_generation
+  description: Create a Vyond Go or AI-avatar video generation (v2).
+  source_operation: openapi/vyond-openapi-original.json#ContentGenerationV2Controller.createGeneration
+  consequence: spends credits
+- name: get_content_generation
+  description: Get the status and result of a content generation task.
+  source_operation: openapi/vyond-openapi-original.json#ContentGenerationV2Controller.getGeneration
+- name: create_content_generation_v1
+  description: Create a content generation using the legacy v1 endpoint (write-only, no readback).
+  source_operation: openapi/vyond-openapi-original.json#ContentGenerationController.createGeneration
+  consequence: spends credits
+- name: create_turbo_video
+  description: Generate a video from a text prompt, optionally grounded on up to three reference files.
+  source_operation: openapi/vyond-openapi-original.json#TurboController.createTurbo
+  consequence: spends credits
+- name: get_turbo_video
+  description: Poll a Turbo generation task for status and download URL.
+  source_operation: openapi/vyond-openapi-original.json#TurboController.getTurbo
+- name: export_video
+  description: Export a video to mp4, webm, gif or a SCORM package.
+  source_operation: openapi/vyond-openapi-original.json#VideoController.exportVideo
+  consequence: spends credits; returns 402 when the account is out
+- name: get_video_export_download
+  description: Retrieve the time-limited download URL for a completed export.
+  source_operation: openapi/vyond-openapi-original.json#VideoController.getVideoExportDownload
+- name: get_parameters
+  description: Look up the valid parameter values for a feature (characters, layouts, voices, backgrounds).
+  source_operation: openapi/vyond-openapi-original.json#ParameterController.getParameters
+- name: get_current_user
+  description: Get the user the token belongs to.
+  source_operation: openapi/vyond-openapi-original.json#UserController.getUser
+- name: list_webhooks
+  description: List registered webhook subscriptions.
+  source_operation: openapi/vyond-openapi-original.json#WebhookController.getWebhooks
+- name: create_webhook
+  description: Register a webhook subscription for generation and export events.
+  source_operation: openapi/vyond-openapi-original.json#WebhookController.createWebhook
+- name: update_webhook
+  description: Update a webhook subscription's url, events or status.
+  source_operation: openapi/vyond-openapi-original.json#WebhookController.updateWebhook
+- name: delete_webhook
+  description: Delete a webhook subscription.
+  source_operation: openapi/vyond-openapi-original.json#WebhookController.deleteWebhook
+excluded_from_tools:
+  reason: >-
+    The seven SCIM 2.0 operations are deliberately not exposed as agent tools. They
+    create, update and deactivate real enterprise user accounts against an identity
+    provider and belong behind an administrative flow, not an agent loop.
+  operations:
+  - ScimController.getUsers
+  - ScimController.createUser
+  - ScimController.getUser
+  - ScimController.updateUser
+  - ScimController.patchUser
+  - ScimController.getSchemas
+  - ScimController.getSchema
+authentication:
+  scheme: bearer
+  detail: authentication/vyond-authentication.yml
+counts:
+  rest_operations: 20
+  candidate_tools: 13
+  excluded: 7
+x-evidence:
+  checked: '2026-08-05'
+  probes:
+  - {url: 'https://api.vyond.com/.well-known/agent-card.json', status: 404}
+  - {url: 'https://api.vyond.com/.well-known/agent.json', status: 404}
+  - {url: 'https://www.vyond.com/.well-known/ai-plugin.json', status: 404}
+x-pointer-note: >-
+  Wired into apis.yml as `type: MCPCandidate`, deliberately NOT `type: MCPServer`.
+  Vyond runs no MCP server. The apis.io rating awards 4 ergonomics points and 12
+  agent-readiness points to a `MCPServer` pointer, and awarding those for a
+  candidate tool list that API Evangelist authored would credit Vyond with a
+  surface it does not operate. Promote this to `MCPServer` only if and when Vyond
+  publishes a real endpoint.

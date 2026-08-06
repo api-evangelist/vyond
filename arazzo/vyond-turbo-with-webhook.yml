@@ -1,0 +1,95 @@
+arazzo: 1.0.1
+info:
+  title: Turbo text-to-video with a webhook subscription
+  version: 1.0.0
+  summary: >-
+    Register a webhook subscription for Turbo events, submit a text prompt to
+    Turbo, and poll the task as a fallback until it reaches a terminal status.
+sourceDescriptions:
+- name: vyond
+  url: ../openapi/vyond-openapi-original.json
+  type: openapi
+workflows:
+- workflowId: turbo-generate-with-webhook
+  summary: Prompt in, finished video out, with event delivery registered up front.
+  description: >-
+    Vyond states Turbo webhook events are always emitted for every task, so the
+    subscription can be registered before the task completes. Requires a Turbo
+    license on the account; without one every Turbo call returns 403. Step 2 spends
+    credits and accepts no Idempotency-Key.
+  inputs:
+    type: object
+    required: [webhookUrl, prompt]
+    properties:
+      webhookUrl:
+        type: string
+        format: uri
+        description: HTTPS endpoint that will receive the signed events.
+      webhookName:
+        type: string
+        default: turbo-events
+      prompt:
+        type: string
+        minLength: 1
+        maxLength: 10000
+      mode:
+        type: string
+        enum: [STILL_IMAGE, VIDEO_CLIP]
+        default: STILL_IMAGE
+  steps:
+  - stepId: create-webhook
+    description: >-
+      Register the subscription. The create response is the ONLY time the secret is
+      returned — store it, it is required to verify every delivery.
+    operationId: WebhookController.createWebhook
+    requestBody:
+      contentType: application/json
+      payload:
+        name: $inputs.webhookName
+        url: $inputs.webhookUrl
+        events:
+        - turbo_generation.succeeded
+        - turbo_generation.failed
+        status: enabled
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      webhookId: $response.body#/webhookId
+      webhookSecret: $response.body#/secret
+  - stepId: create-turbo
+    description: >-
+      Submit the prompt. SPENDS CREDITS. A 422 means malware was detected in an
+      uploaded reference file — terminal, do not resubmit.
+    operationId: TurboController.createTurbo
+    requestBody:
+      contentType: application/json
+      payload:
+        prompt: $inputs.prompt
+        mode: $inputs.mode
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      turboId: $response.body#/id
+  - stepId: poll-turbo
+    description: >-
+      Fallback to the webhook. Poll until status is completed, failed or cancelled.
+      turbo_generation.cancelled is NOT in the subscribable events enum, so polling
+      is the only reliable way to observe a cancellation.
+    operationId: TurboController.getTurbo
+    parameters:
+    - name: id
+      in: path
+      value: $steps.create-turbo.outputs.turboId
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      status: $response.body#/status
+      downloadUrl: $response.body#/downloadUrl
+      creditConsumed: $response.body#/creditConsumed
+      expiredAt: $response.body#/expiredAt
+      turboThreadUrl: $response.body#/turboThreadUrl
+  outputs:
+    webhookId: $steps.create-webhook.outputs.webhookId
+    turboId: $steps.create-turbo.outputs.turboId
+    downloadUrl: $steps.poll-turbo.outputs.downloadUrl
+    creditConsumed: $steps.poll-turbo.outputs.creditConsumed

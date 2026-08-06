@@ -1,0 +1,125 @@
+arazzo: 1.0.1
+info:
+  title: Generate a Vyond video and export it
+  version: 1.0.0
+  summary: >-
+    Read the parameter vocabulary, create a Vyond Go or AI-avatar content
+    generation, poll the task to completion, export the resulting video, then
+    retrieve the expiring download URL.
+sourceDescriptions:
+- name: vyond
+  url: ../openapi/vyond-openapi-original.json
+  type: openapi
+workflows:
+- workflowId: generate-and-export-video
+  summary: End-to-end video production against the Vyond REST API.
+  description: >-
+    Every operationId below exists verbatim in the published Vyond OpenAPI at
+    https://api.vyond.com/doc/openapi.json. Note that steps 2 and 4 each spend
+    account credits and Vyond accepts no Idempotency-Key, so a fork of this
+    workflow must not blind-retry them.
+  inputs:
+    type: object
+    required: [feature, generationType]
+    properties:
+      feature:
+        type: string
+        description: Feature whose parameter vocabulary to read (see GetParametersReqQuery).
+      generationType:
+        type: string
+        enum: [vyondGo, aiAvatar]
+      vyondGoParams:
+        type: object
+        description: Required when generationType is vyondGo.
+      aiAvatarParams:
+        type: object
+        description: Required when generationType is aiAvatar.
+      exportCategory:
+        type: string
+        enum: [mp4, webm, gif, scorm_1_2, scorm_2004_v4]
+        default: mp4
+      exportResolution:
+        type: string
+        enum: ['240p', '360p', '480p', '600p', '720p', '1080p']
+        default: '1080p'
+  steps:
+  - stepId: read-parameters
+    description: Read the enumerated vocabulary a generation request must draw from.
+    operationId: ParameterController.getParameters
+    parameters:
+    - name: feature
+      in: query
+      value: $inputs.feature
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      parameters: $response.body
+  - stepId: create-generation
+    description: >-
+      Create the content generation. SPENDS CREDITS — no idempotency key is
+      accepted, so do not retry this step on a timeout.
+    operationId: ContentGenerationV2Controller.createGeneration
+    requestBody:
+      contentType: application/json
+      payload:
+        type: $inputs.generationType
+        vyondGoParams: $inputs.vyondGoParams
+        aiAvatarParams: $inputs.aiAvatarParams
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      generationId: $response.body#/id
+  - stepId: poll-generation
+    description: >-
+      Poll until status resolves. Back off exponentially — 429 is declared with no
+      published limit and no Retry-After header.
+    operationId: ContentGenerationV2Controller.getGeneration
+    parameters:
+    - name: id
+      in: path
+      value: $steps.create-generation.outputs.generationId
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      videoId: $response.body#/videoId
+      generationStatus: $response.body#/status
+  - stepId: export-video
+    description: >-
+      Export the generated video. SPENDS CREDITS — returns 402 Payment Required
+      when the account is exhausted, and no endpoint reads the credit balance.
+      completionCriteria is required for SCORM categories.
+    operationId: VideoController.exportVideo
+    parameters:
+    - name: videoId
+      in: path
+      value: $steps.poll-generation.outputs.videoId
+    requestBody:
+      contentType: application/json
+      payload:
+        category: $inputs.exportCategory
+        resolution: $inputs.exportResolution
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      conversionId: $response.body#/id
+  - stepId: get-download-url
+    description: >-
+      Retrieve the download URL. It expires at expireAt — fetch the bytes
+      immediately rather than persisting the URL.
+    operationId: VideoController.getVideoExportDownload
+    parameters:
+    - name: videoId
+      in: path
+      value: $steps.poll-generation.outputs.videoId
+    - name: conversionId
+      in: path
+      value: $steps.export-video.outputs.conversionId
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      downloadUrl: $response.body#/downloadUrl
+      expireAt: $response.body#/expireAt
+  outputs:
+    videoId: $steps.poll-generation.outputs.videoId
+    downloadUrl: $steps.get-download-url.outputs.downloadUrl
+    expireAt: $steps.get-download-url.outputs.expireAt

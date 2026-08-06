@@ -1,0 +1,78 @@
+generated: '2026-08-05'
+method: searched
+source: https://api.vyond.com/doc/
+docs: https://api.vyond.com/doc/#tag/Introduction
+note: >-
+  Vyond documents OAuth 2.0 access tokens for its REST API but does NOT declare an
+  oauth2 securityScheme in the OpenAPI — the only scheme in components is
+  `bearer` (http/bearer). The scope names below are therefore not machine-readable
+  from the flows map; they are named explicitly in the 403 response descriptions of
+  the operations that require them, which is the only place Vyond publishes them.
+  There is no published scope-reference page, no authorization/token URL, and no
+  /.well-known/oauth-authorization-server (probed 2026-08-05, 404). Recorded here
+  so the gap is legible rather than absent.
+schemes:
+- name: bearer
+  type: http
+  scheme: bearer
+  source: openapi/vyond-openapi-original.json
+  applies_to: both the REST API and the SCIM 2.0 API
+  token_types:
+  - name: API token
+    surface: SCIM 2.0 (https://api.vyond.com/scim/v2/)
+    issued_at: Vyond app > Security > SCIM Provisioning > Authorization token
+    docs: https://help.vyond.com/hc/en-us/articles/32250964864660-SCIM-Provisioning
+  - name: Personal Access Token
+    surface: REST (https://api.vyond.com/rest/)
+    issued_at: Vyond app > profile icon > API tokens > Personal Access token
+    docs: https://help.vyond.com/hc/en-us/articles/51873650828052-How-do-I-use-the-Vyond-API
+    note: >-
+      Help Center states the API token page is currently hidden and access must be
+      requested from support@vyond.com.
+  - name: OAuth 2.0 access token
+    surface: REST (https://api.vyond.com/rest/)
+    note: >-
+      Documented in the Introduction as short-lived and refresh-token renewable.
+      No authorization endpoint, token endpoint, grant type or discovery document is
+      published. Vyond states "Vyond will soon support API tokens in REST API
+      authentication."
+scopes:
+- scope: VYOND_GO
+  description: >-
+    Required to create Vyond Go content generations. Absence returns 403
+    "Forbidden - missing required VYOND_GO scope or invalid owner type".
+  sources: [openapi/vyond-openapi-original.json]
+  operations:
+  - ContentGenerationController.createGeneration
+- scope: VIDEO_EXPORT
+  description: >-
+    Required to create a video export and to retrieve the resulting download URL.
+    Absence returns 403 "Forbidden - missing required VIDEO_EXPORT scope or access
+    denied".
+  sources: [openapi/vyond-openapi-original.json]
+  operations:
+  - VideoController.exportVideo
+  - VideoController.getVideoExportDownload
+unnamed_scope_requirements:
+- operations:
+  - ContentGenerationV2Controller.createGeneration
+  - ParameterController.getParameters
+  - TurboController.createTurbo
+  - TurboController.getTurbo
+  note: >-
+    These operations return 403 "missing required scope" but the scope name is not
+    published in the documentation. TurboController additionally requires a Turbo
+    license on the account.
+owner_type_constraint: >-
+  Several operations (getUser, all webhook management, content generation v2 read)
+  return 403 "invalid owner type (non-user token)" — the token must be a user-owned
+  token, not an account/service token. This is an authorization dimension separate
+  from scope.
+x-evidence:
+  fetched: '2026-08-05'
+  url: https://api.vyond.com/doc/openapi.json
+  http_status: 200
+  probed_absent:
+  - {url: 'https://api.vyond.com/.well-known/oauth-authorization-server', status: 404}
+  - {url: 'https://api.vyond.com/.well-known/openid-configuration', status: 404}
+  - {url: 'https://api.vyond.com/oauth/token', status: 404}

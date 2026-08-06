@@ -1,0 +1,36 @@
+generated: '2026-08-05'
+method: searched
+source: public package-registry search + the Vyond API documentation at https://api.vyond.com/doc/
+packages: []
+summary: >-
+  Vyond publishes no first-party client library in any public package registry.
+  The API documentation ships no SDK section and no code samples beyond the inline
+  Node.js snippet used to demonstrate webhook signature verification. Integration is
+  raw HTTPS + bearer token. The two GitHub organizations that carry the Vyond and
+  GoAnimate names both exist but hold zero public repositories, so there is no
+  first-party source distribution either.
+registries_checked:
+- registry: npm
+  query: vyond
+  result: no first-party package (registry search returned no Vyond-published library)
+- registry: pypi
+  queries: [vyond, vyond-api, pyvyond]
+  result: 404 on every candidate
+- registry: github
+  orgs:
+  - {org: vyond, status: 200, public_repos: 0}
+  - {org: goanimate, status: 200, public_repos: 0}
+  - {org: vyond-inc, status: 404}
+  result: >-
+    The 308 GitHub repositories matching "vyond" are all community projects
+    reviving the retired Flash-era Legacy Video Maker (wrapper-offline,
+    GoAnimate-Wrapper, etc.). None are first-party and none target the current
+    api.vyond.com contract.
+- registry: maven-central
+  result: not searched — Vyond ships no JVM surface
+- registry: nuget
+  result: not searched — Vyond ships no .NET surface
+x-gap: >-
+  A provider with a clean 20-operation OpenAPI and no generated SDK in any registry
+  is leaving the cheapest ergonomics win on the table; the spec at
+  https://api.vyond.com/doc/openapi.json is directly generatable.

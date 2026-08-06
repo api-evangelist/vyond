@@ -1,0 +1,293 @@
+generated: '2026-08-05'
+method: derived
+source: openapi/vyond-openapi-original.json (heuristic corrected by hand — see x-correction)
+description: Recommended x-agentic-access execution contracts, classified heuristically from the OpenAPI.
+  A governance starting point for exposing this API to AI agents — review and bind audience per deployment.
+  See research/curity/agentic-governance/.
+summary:
+  operations: 20
+  by_action_class:
+    acting: 10
+    connected: 10
+  by_consequence:
+    physical: 4
+    read: 10
+    write: 6
+  human_in_the_loop_required: 0
+operations:
+- path: /rest/v1/generations/
+  method: post
+  operationId: ContentGenerationController.createGeneration
+  x-agentic-access:
+    action-class: acting
+    consequence: physical
+    audience: null
+    token:
+      max-ttl: 300
+      exchange: true
+      purpose-required: true
+    audit: required
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    subject: required
+- path: /rest/v2/generations/
+  method: post
+  operationId: ContentGenerationV2Controller.createGeneration
+  x-agentic-access:
+    action-class: acting
+    consequence: physical
+    audience: null
+    token:
+      max-ttl: 300
+      exchange: true
+      purpose-required: true
+    audit: required
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    subject: required
+- path: /rest/v2/generations/{id}
+  method: get
+  operationId: ContentGenerationV2Controller.getGeneration
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /scim/v2/Users
+  method: get
+  operationId: ScimController.getUsers
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /scim/v2/Users
+  method: post
+  operationId: ScimController.createUser
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    audience: null
+    token:
+      max-ttl: 900
+    audit: required
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    subject: required
+- path: /scim/v2/Users/{userId}
+  method: get
+  operationId: ScimController.getUser
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /scim/v2/Users/{userId}
+  method: put
+  operationId: ScimController.updateUser
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    audience: null
+    token:
+      max-ttl: 900
+    audit: required
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    subject: required
+- path: /scim/v2/Users/{userId}
+  method: patch
+  operationId: ScimController.patchUser
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    audience: null
+    token:
+      max-ttl: 900
+    audit: required
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    subject: required
+- path: /scim/v2/Schemas
+  method: get
+  operationId: ScimController.getSchemas
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /scim/v2/Schemas/{id}
+  method: get
+  operationId: ScimController.getSchema
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /rest/v1/parameters/
+  method: get
+  operationId: ParameterController.getParameters
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /rest/v1/turbo/
+  method: post
+  operationId: TurboController.createTurbo
+  x-agentic-access:
+    action-class: acting
+    consequence: physical
+    audience: null
+    token:
+      max-ttl: 300
+      exchange: true
+      purpose-required: true
+    audit: required
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    subject: required
+- path: /rest/v1/turbo/{id}
+  method: get
+  operationId: TurboController.getTurbo
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /rest/v1/users/me
+  method: get
+  operationId: UserController.getUser
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /rest/v1/videos/{videoId}/exports
+  method: post
+  operationId: VideoController.exportVideo
+  x-agentic-access:
+    action-class: acting
+    consequence: physical
+    audience: null
+    token:
+      max-ttl: 300
+      exchange: true
+      purpose-required: true
+    audit: required
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    subject: required
+- path: /rest/v1/videos/{videoId}/exports/{conversionId}
+  method: get
+  operationId: VideoController.getVideoExportDownload
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /rest/v1/webhooks/
+  method: get
+  operationId: WebhookController.getWebhooks
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /rest/v1/webhooks/
+  method: post
+  operationId: WebhookController.createWebhook
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    audience: null
+    token:
+      max-ttl: 900
+    audit: required
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    subject: required
+- path: /rest/v1/webhooks/{webhookId}
+  method: patch
+  operationId: WebhookController.updateWebhook
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    audience: null
+    token:
+      max-ttl: 900
+    audit: required
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    subject: required
+- path: /rest/v1/webhooks/{webhookId}
+  method: delete
+  operationId: WebhookController.deleteWebhook
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    audience: null
+    token:
+      max-ttl: 900
+    audit: required
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    subject: required
+x-correction: 'derive-agentic-access.py classified all 10 write operations as safety-critical. That was
+  a false positive from its substring keyword match: every Vyond operationId is of the form ''<Name>Controller.<method>'',
+  and ''Controller'' contains the SAFETY_WORDS token ''control''. Reclassified here against the actual
+  semantics — the four credit-consuming operations (content generation v1/v2, Turbo, video export) are
+  ''physical'' because they spend real account credits irreversibly and exportVideo returns 402 Payment
+  Required when exhausted; the remaining six writes (SCIM user create/update/patch, webhook create/update/delete)
+  are ''write''. Nothing in this API is safety-critical. The upstream heuristic needs a word-boundary
+  match; every Controller-named spec in the network is affected.'

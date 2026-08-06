@@ -1,0 +1,63 @@
+generated: '2026-08-05'
+method: generated
+source: openapi/vyond-openapi-original.json + https://api.vyond.com/doc/
+note: >-
+  Every step in every skill is grounded in an operationId that exists verbatim in
+  the published Vyond OpenAPI. No operation, parameter or error code below was
+  invented.
+skills:
+- file: vyond-generate-and-export-video.md
+  name: Generate a Vyond video and export it
+  description: >-
+    The marquee flow — read the parameter vocabulary, create a Vyond Go or
+    AI-avatar generation, resolve it by webhook or polling, export to
+    mp4/webm/gif/SCORM, and collect the expiring download URL.
+  api: openapi/vyond-openapi-original.json
+  operations:
+  - ParameterController.getParameters
+  - ContentGenerationV2Controller.createGeneration
+  - ContentGenerationV2Controller.getGeneration
+  - VideoController.exportVideo
+  - VideoController.getVideoExportDownload
+- file: vyond-turbo-text-to-video.md
+  name: Generate a video from a text prompt with Vyond Turbo
+  description: >-
+    Submit a prompt (optionally grounded on up to three reference documents), track
+    the task, and collect the download URL and credit cost.
+  api: openapi/vyond-openapi-original.json
+  operations:
+  - TurboController.createTurbo
+  - TurboController.getTurbo
+  - WebhookController.createWebhook
+- file: vyond-verify-webhook-signature.md
+  name: Subscribe to Vyond webhooks and verify the signature
+  description: >-
+    Register and manage webhook subscriptions, then verify the HMAC-SHA256
+    x-vyond-signature over "timestamp:rawBody" before acting on any event.
+  api: openapi/vyond-openapi-original.json
+  operations:
+  - WebhookController.getWebhooks
+  - WebhookController.createWebhook
+  - WebhookController.updateWebhook
+  - WebhookController.deleteWebhook
+- file: vyond-scim-user-provisioning.md
+  name: Provision Vyond users over SCIM 2.0
+  description: >-
+    Create, read, filter, update, patch and deactivate enterprise user accounts
+    against the RFC 7643/7644 SCIM surface, including Vyond's userName-equals-email
+    constraint and the unsupported Groups model.
+  api: openapi/vyond-openapi-original.json
+  operations:
+  - ScimController.getUsers
+  - ScimController.createUser
+  - ScimController.getUser
+  - ScimController.updateUser
+  - ScimController.patchUser
+  - ScimController.getSchemas
+  - ScimController.getSchema
+cross_cutting_rules:
+  auth: authentication/vyond-authentication.yml
+  scopes: scopes/vyond-scopes.yml
+  conventions: conventions/vyond-conventions.yml
+  errors: errors/vyond-problem-types.yml
+  events: asyncapi/vyond-webhooks.yml

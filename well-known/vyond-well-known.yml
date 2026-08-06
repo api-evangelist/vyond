@@ -1,0 +1,73 @@
+generated: '2026-08-05'
+method: probed
+source: live GET of the /.well-known/ discovery surface on every Vyond host
+summary: >-
+  No /.well-known/ discovery document is published on any Vyond host. Every canonical
+  path returns 404 on the API host, the app host, the marketing host, the product
+  (changelog) host and the Zendesk help host. Notably there is no RFC 9116
+  security.txt and no RFC 8615 api-catalog, and no A2A agent card at either the
+  canonical or the legacy path. The OpenAPI is published instead at a
+  non-well-known location, https://api.vyond.com/doc/openapi.json.
+hosts:
+- host: https://api.vyond.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+- host: https://www.vyond.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+- host: https://app.vyond.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+- host: https://product.vyond.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+- host: https://help.vyond.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+x-evidence:
+  checked: '2026-08-05'
+  note: >-
+    llms.txt IS published, but at the root of the marketing host rather than under
+    /.well-known/ — https://www.vyond.com/llms.txt returned 200 text/plain.
+    Captured verbatim at llms/vyond-llms.txt.

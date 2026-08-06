@@ -1,0 +1,118 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for the Vyond API
+  version: 1.0.0
+extends: openapi/vyond-openapi-original.json
+x-generated: '2026-08-05'
+x-method: generated
+x-source: >-
+  Enhancements derived from the published Vyond documentation at
+  https://api.vyond.com/doc/ and the artifacts in this repository. The harvested
+  spec at openapi/vyond-openapi-original.json is never mutated.
+actions:
+- target: $.info
+  description: >-
+    Add contact, licence-free provenance and the API Evangelist profile pointers the
+    published spec omits.
+  update:
+    x-apievangelist-profile: https://apis.io/provider/vyond
+    x-apievangelist-harvested: '2026-08-05'
+    x-source-url: https://api.vyond.com/doc/openapi.json
+    x-documentation: https://api.vyond.com/doc/
+    x-support-email: support@vyond.com
+- target: $
+  description: >-
+    The published document declares no servers[]. Every documented path is rooted at
+    api.vyond.com, confirmed live (SCIM returned application/scim+json, REST
+    returned the Vyond error envelope), so declare it explicitly — without this an
+    OpenAPI client has no base URL to call.
+  update:
+    servers:
+    - url: https://api.vyond.com
+      description: Vyond production API (REST at /rest/{version}/, SCIM 2.0 at /scim/v2/)
+- target: $.components.securitySchemes.bearer
+  description: Document what the bearer token actually is, which the spec leaves unstated.
+  update:
+    description: >-
+      Bearer token. The SCIM 2.0 surface uses an API token generated in the Vyond
+      application under Security > SCIM Provisioning. The REST surface uses an
+      OAuth 2.0 access token, or a Personal Access Token generated under
+      profile > API tokens (the page is currently hidden — contact
+      support@vyond.com to enable it).
+    x-token-types: [scim-api-token, oauth2-access-token, personal-access-token]
+- target: $.paths['/rest/v1/videos/{videoId}/exports/{conversionId}'].get
+  description: >-
+    This operation is the only one in the document with no security requirement,
+    while its own 401 and 403 responses show it is in fact authenticated and
+    requires the VIDEO_EXPORT scope. Restore the requirement.
+  update:
+    security:
+    - bearer: []
+    x-apievangelist-note: >-
+      security[] was absent in the published spec; added to match the operation's
+      documented 401/403 responses.
+- target: $.paths['/rest/v1/videos/{videoId}/exports/{conversionId}'].get
+  description: >-
+    The published spec tags this operation "Video" while its sibling exportVideo is
+    tagged "Video Export", and no "Video" tag is declared in tags[]. Normalize.
+  update:
+    x-apievangelist-tag-correction:
+      published: Video
+      corrected: Video Export
+      reason: undeclared tag; splits the export flow across two groups
+- target: $.paths['/rest/v1/generations/'].post
+  description: Flag the undeclared v1/v2 overlap for consumers.
+  update:
+    x-apievangelist-note: >-
+      Superseded in practice by POST /rest/v2/generations/, which adds a readable
+      task. Vyond does not mark this operation deprecated and publishes no migration
+      guidance; both remain live.
+- target: $.paths['/rest/v1/turbo/'].post
+  description: Record the credit consequence and the missing idempotency guard.
+  update:
+    x-apievangelist-consequence: spends account credits
+    x-apievangelist-idempotency: >-
+      No Idempotency-Key is accepted. A client retry after a timeout starts a second
+      billable generation.
+- target: $.paths['/rest/v1/videos/{videoId}/exports'].post
+  description: Record the credit consequence and the missing idempotency guard.
+  update:
+    x-apievangelist-consequence: spends account credits; returns 402 when exhausted
+    x-apievangelist-idempotency: >-
+      No Idempotency-Key is accepted. A client retry after a timeout starts a second
+      billable export.
+- target: $.paths['/rest/v2/generations/'].post
+  description: Record the credit consequence and the missing idempotency guard.
+  update:
+    x-apievangelist-consequence: spends account credits
+    x-apievangelist-idempotency: >-
+      No Idempotency-Key is accepted. A client retry after a timeout starts a second
+      billable generation.
+- target: $.components.schemas.ApiErrorResponse
+  description: Point the error envelope at the derived catalog.
+  update:
+    x-apievangelist-error-catalog: errors/vyond-problem-types.yml
+    x-apievangelist-note: >-
+      Vyond-native envelope, not RFC 9457 problem+json. The `err` value space is not
+      published as a registry; only six codes are named anywhere in the docs.
+- target: $.components.schemas.Webhook
+  description: Point at the derived event catalog and flag the enum divergence.
+  update:
+    x-apievangelist-event-catalog: asyncapi/vyond-webhooks.yml
+    x-apievangelist-note: >-
+      turbo_generation.cancelled is documented with a sample payload in the Turbo
+      tag but is absent from this subscribable events enum.
+- target: $.components.schemas.ScimGroup
+  description: Mark the unimplemented SCIM Group model.
+  update:
+    x-apievangelist-note: >-
+      Defined in components but not implemented — no /scim/v2/Groups operation
+      exists, and Vyond's SCIM Provisioning article states Groups is unsupported in
+      the current version.
+- target: $.components.schemas.Video
+  description: Mark the unreachable core entity.
+  update:
+    x-apievangelist-note: >-
+      The central entity of the API, referenced by exports and generation webhooks,
+      but no operation returns it. There is no list-videos or get-video endpoint; a
+      caller must source videoId from the web application or from a webhook payload.

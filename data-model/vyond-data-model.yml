@@ -1,0 +1,104 @@
+generated: '2026-08-05'
+method: derived
+source: openapi/vyond-openapi-original.json
+summary: >-
+  Two disjoint entity graphs share one host. The REST graph is a content-production
+  pipeline: a Video is the durable artifact; ContentGeneration, Turbo and Export are
+  asynchronous tasks that produce or transform it; a Webhook is the notification
+  channel. The SCIM graph is the standard RFC 7643 User/Group/Schema model. Nothing
+  links them — there is no field anywhere in the REST surface that references a SCIM
+  user id.
+entities:
+- name: Video
+  schema: Video
+  identifier: videoId (string)
+  description: The durable video artifact in a workspace.
+  fields_of_note: [title, description, aspectRatio, isShared, thumbnail, animatedThumbnailUrl, isTrashed, spaceId, spaceName, folderId, creatorUserId, ownerId, lastModifierId]
+  readable_via_api: false
+  note: >-
+    The Video schema is fully defined in components but NO operation returns it —
+    there is no list-videos or get-video endpoint. A caller must already know a
+    videoId (obtained from the web application or from a generation webhook) before
+    it can export.
+- name: ContentGeneration
+  schemas: [ContentGenerationV2CreateReqBody, ContentGenerationV2GetResBody, ContentGenerationCreateResBody]
+  identifier: id (task id)
+  description: An asynchronous Vyond Go or AI-avatar generation task.
+  types: [vyondGo, aiAvatar]
+  produces: Video
+- name: TurboGeneration
+  schemas: [TurboCreateReqBody, TurboCreateResBody, TurboGetResBody]
+  identifier: id (thread id)
+  description: >-
+    An asynchronous text-prompt video generation, optionally grounded on up to three
+    reference documents (txt/pdf/docx/pptx, 100MB each, 100 pages max).
+  statuses: [queued, processing, completed, failed, cancelled]
+  modes: [STILL_IMAGE, VIDEO_CLIP]
+  produces: a downloadable video (expiring URL), plus creditConsumed
+- name: VideoExport
+  schemas: [ExportVideoReqBody, ExportVideoResBody, GetVideoExportDownloadResBody]
+  identifier: conversionId (integer)
+  description: A conversion of a specific Video revision into a distributable format.
+  formats: [mp4, webm, gif, scorm_1_2, scorm_2004_v4]
+  resolutions: ['240p', '360p', '480p', '600p', '720p', '1080p']
+- name: Webhook
+  schemas: [Webhook, WebhookWithSecret, WebhookCreateReqBody, WebhookUpdateReqBody, WebhookListResBody]
+  identifier: webhookId (string)
+  description: A persistent event subscription owned by a user.
+- name: CallbackWebhook
+  schema: CallbackWebhook
+  description: A one-off, task-scoped callback url+secret supplied inline on a create request.
+- name: User
+  schema: GetUserResBody
+  description: The user the bearer token belongs to (REST /rest/v1/users/me).
+- name: Parameter
+  schemas: [Parameter, GetParametersReqQuery, GetParametersResBody, ValueObject]
+  description: >-
+    The enumerated vocabulary a generation request must draw from — characters,
+    voices, layouts, backgrounds, aspect ratios, language settings. This is the
+    lookup table that makes the generation endpoints usable.
+- name: ScimUser
+  schemas: [ScimUser, ScimBaseUser, ScimUserWithMeta, ScimVyondUser, ScimEnterpriseUser, ScimUserList]
+  identifier: userId
+  description: RFC 7643 User, with a Vyond extension and an enterprise extension.
+  constraint: userName must equal the email address
+- name: ScimGroup
+  schemas: [ScimGroup, ScimGroupWithMeta, ScimGroupList, ScimGroupMember]
+  description: >-
+    Defined in components but NOT implemented — Vyond's SCIM Provisioning article
+    states Groups is unsupported in the current version, and no /scim/v2/Groups
+    operation exists.
+  implemented: false
+- name: ScimSchema
+  schemas: [ScimSchemaWithMeta, ScimSchemaAttribute, ScimSchemaList]
+  description: SCIM schema discovery (/scim/v2/Schemas).
+relationships:
+- {from: ContentGeneration, to: Video, type: has_one, via: videoId, evidence: video_generation.succeeded webhook payload}
+- {from: ContentGeneration, to: CallbackWebhook, type: has_one, via: callbackWebhook, evidence: ContentGenerationV2CreateReqBody}
+- {from: TurboGeneration, to: CallbackWebhook, type: has_one, via: callbackWebhook, evidence: TurboCreateReqBody}
+- {from: VideoExport, to: Video, type: belongs_to, via: videoId, evidence: 'path /rest/v1/videos/{videoId}/exports'}
+- {from: VideoExport, to: CallbackWebhook, type: has_one, via: callbackWebhook, evidence: ExportVideoReqBody}
+- {from: VideoExport, to: Video, type: pins, via: revision, evidence: 'ExportVideoReqBody.revision — defaults to latest'}
+- {from: Video, to: User, type: belongs_to, via: ownerId, evidence: Video schema}
+- {from: Video, to: User, type: belongs_to, via: creatorUserId, evidence: Video schema}
+- {from: Video, to: User, type: belongs_to, via: lastModifierId, evidence: Video schema}
+- {from: Video, to: Space, type: belongs_to, via: spaceId, evidence: 'Video schema — Space has no schema of its own'}
+- {from: Video, to: Folder, type: belongs_to, via: folderId, evidence: 'Video schema — Folder has no schema of its own'}
+- {from: Webhook, to: User, type: belongs_to, via: owner type user, evidence: '403 "invalid owner type (non-user token)" on all webhook operations'}
+- {from: ScimUser, to: ScimEnterpriseUser, type: has_one, via: schema extension, evidence: ScimUser allOf}
+- {from: ScimUser, to: ScimSubscriptionObject, type: has_one, via: subscription, evidence: ScimVyondUser}
+dangling_references:
+- {entity: Space, via: 'Video.spaceId, Video.spaceName', note: referenced but never defined or readable}
+- {entity: Folder, via: Video.folderId, note: referenced but never defined or readable}
+- {entity: Video, note: 'defined and referenced by three task types, but no operation returns it'}
+identifier_formats:
+  task_ids: UUID (xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx per the webhook samples)
+  conversionId: positive integer
+  videoId: UUID
+  webhook_secret: 64 chars, [0-9A-Za-z]
+counts:
+  schemas: 66
+  scim_schemas: 24
+  rest_schemas: 42
+  entities: 12
+  relationships: 14

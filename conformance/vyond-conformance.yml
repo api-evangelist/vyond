@@ -1,0 +1,127 @@
+generated: '2026-08-05'
+method: searched
+source: https://api.vyond.com/doc/ + https://www.vyond.com/trust-center/ + live probe of https://api.vyond.com/scim/v2/
+standards:
+- id: openapi-3.0
+  conforms: true
+  evidence: >-
+    openapi 3.0.0 document published at https://api.vyond.com/doc/openapi.json
+    (HTTP 200, application/json, 81,751 bytes) — 15 paths, 20 operations,
+    66 component schemas, every operation carrying an operationId, summary,
+    tags and 2xx/4xx/5xx responses.
+- id: scim-2.0
+  conforms: true
+  evidence: >-
+    /scim/v2/Users, /scim/v2/Schemas implemented with application/scim+json
+    responses, urn:ietf:params:scim:api:messages:2.0 schema URNs,
+    startIndex/count pagination, SCIM filter grammar, PATCH operations and
+    scimType error discriminators. Verified live: unauthenticated GET
+    https://api.vyond.com/scim/v2/ServiceProviderConfig returned 401 with
+    content-type application/scim+json and a
+    urn:ietf:params:scim:api:messages:2.0:Error body.
+  spec: RFC 7643 / RFC 7644
+  gaps:
+  - >-
+    Groups are not supported — Vyond's own SCIM Provisioning article states
+    "Groups is not supported in the current version", although ScimGroup /
+    ScimGroupList schemas exist in the OpenAPI components.
+  - >-
+    /scim/v2/ServiceProviderConfig and /scim/v2/ResourceTypes are live on the
+    host but are not declared in the OpenAPI.
+- id: oauth2
+  conforms: partial
+  evidence: >-
+    The Introduction documents OAuth 2.0 access tokens with refresh-token renewal
+    for the REST API, but the OpenAPI declares only an http/bearer scheme — no
+    oauth2 securityScheme, no flows, no authorizationUrl/tokenUrl. No RFC 8414
+    metadata document (probed /.well-known/oauth-authorization-server, 404).
+- id: oidc
+  conforms: false
+  evidence: 'probed https://api.vyond.com/.well-known/openid-configuration → 404'
+- id: rfc9457-problem-details
+  conforms: false
+  evidence: >-
+    Errors use a Vyond-native envelope {err, reason, message, scimType, details}
+    served as application/json, not application/problem+json.
+- id: rfc9116-security-txt
+  conforms: false
+  evidence: '/.well-known/security.txt returned 404 on all five Vyond hosts'
+- id: rfc8615-api-catalog
+  conforms: false
+  evidence: '/.well-known/api-catalog returned 404 on api.vyond.com and www.vyond.com'
+- id: rfc8594-sunset-header
+  conforms: false
+  evidence: no Sunset or Deprecation header documented; no deprecation policy published
+- id: asyncapi
+  conforms: false
+  evidence: >-
+    Vyond ships a real webhook event surface with six event types and HMAC-SHA256
+    signing, but publishes no AsyncAPI document. Captured as a webhook catalog at
+    asyncapi/vyond-webhooks.yml.
+- id: webhook-signature-hmac-sha256
+  conforms: true
+  evidence: >-
+    x-vyond-signature / x-vyond-request-timestamp, hex HMAC-SHA256 over
+    "timestamp:rawBody", with a documented replay-window recommendation.
+- id: a2a
+  conforms: false
+  evidence: >-
+    /.well-known/agent-card.json and /.well-known/agent.json both returned 404 on
+    api.vyond.com, www.vyond.com, app.vyond.com, product.vyond.com and
+    help.vyond.com
+- id: mcp
+  conforms: false
+  evidence: no hosted or published Model Context Protocol server found
+- id: llms-txt
+  conforms: true
+  evidence: >-
+    https://www.vyond.com/llms.txt returned 200 text/plain (101,546 bytes).
+    It indexes the marketing site — posts, product pages, integrations, showcase —
+    and points at an llms-full.txt. It does not reference the API.
+- id: scorm
+  conforms: true
+  evidence: >-
+    Video export supports scorm_1_2 and scorm_2004_v4 package formats with a
+    completionCriteria percentage, per the ExportVideoReqBody schema.
+- id: iso-27001
+  conforms: true
+  evidence: >-
+    ISO/IEC 27001:2022 certified across all locations and products; certificate and
+    Statement of Applicability offered for direct download from
+    https://www.vyond.com/trust-center/
+- id: fedramp
+  conforms: true
+  evidence: >-
+    Trust center states initial FedRAMP certification achieved June 2025,
+    ID FR2433985791
+- id: gdpr
+  conforms: true
+  evidence: 'https://www.vyond.com/solutions/enterprise/security/ states compliance with the GDPR'
+- id: ccpa
+  conforms: true
+  evidence: 'https://www.vyond.com/solutions/enterprise/security/'
+- id: eu-us-data-privacy-framework
+  conforms: true
+  evidence: 'EU-U.S. and Swiss-U.S. DPF certified, validated by TRUSTe (trust center)'
+- id: pci-dss
+  conforms: true
+  evidence: >-
+    PCI DSS Level 1 maintained for payment processing; Vyond states it does not
+    itself collect, handle, process or store payment card information.
+- id: soc2
+  conforms: false
+  evidence: >-
+    No Vyond SOC 2 report is offered. The trust center and enterprise security page
+    cite AWS's SOC 1/SOC 2 reports for the underlying infrastructure, which is not
+    the same claim.
+- id: vpat-section-508
+  conforms: true
+  evidence: 'VPAT and Accessibility Conformance Report available via the trust center'
+x-evidence:
+  checked: '2026-08-05'
+  probes:
+  - {url: 'https://api.vyond.com/doc/openapi.json', status: 200}
+  - {url: 'https://api.vyond.com/scim/v2/ServiceProviderConfig', status: 401, content_type: 'application/scim+json'}
+  - {url: 'https://www.vyond.com/trust-center/', status: 200}
+  - {url: 'https://www.vyond.com/solutions/enterprise/security/', status: 200}
+  - {url: 'https://www.vyond.com/llms.txt', status: 200}

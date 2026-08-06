@@ -1,0 +1,117 @@
+generated: '2026-08-05'
+method: derived
+source: openapi/vyond-openapi-original.json
+docs: https://api.vyond.com/doc/#tag/Webhook
+spec_type: Webhooks
+asyncapi_published: false
+asyncapi_note: >-
+  Vyond publishes no AsyncAPI document. Probed https://api.vyond.com/asyncapi.yaml,
+  /asyncapi.json and the GitHub organizations — nothing. The event surface below is
+  derived from the Webhook and Turbo tag descriptions and the Webhook component
+  schema in the published OpenAPI, which is where Vyond actually documents it.
+transport: HTTPS POST to a consumer-supplied URL (https required)
+delivery:
+  modes:
+  - name: subscription
+    description: >-
+      A persistent webhook registered through the Webhook management API. Owner type
+      must be `user`.
+    operations:
+    - WebhookController.getWebhooks
+    - WebhookController.createWebhook
+    - WebhookController.updateWebhook
+    - WebhookController.deleteWebhook
+  - name: one-off callbackWebhook
+    description: >-
+      A url+secret supplied inline on the create request, scoped to that single
+      task.
+    accepted_by:
+    - TurboController.createTurbo
+    - ContentGenerationV2Controller.createGeneration
+    - VideoController.exportVideo
+  - name: zapier
+    description: >-
+      A ZapierCallbackInfo callback type restricted to URLs beginning
+      https://hooks.zapier.com/
+  always_emitted: >-
+    Vyond states webhook events are always emitted for every task, so a subscription
+    registered before completion will receive the event regardless of polling.
+security:
+  signature:
+    algorithm: HMAC-SHA256
+    encoding: hex
+    message: '{x-vyond-request-timestamp}:{raw request body}'
+    headers:
+      signature: x-vyond-signature
+      timestamp: x-vyond-request-timestamp
+    secret:
+      supplied_by: consumer
+      pattern: '^[0-9A-Za-z]{64}$'
+      length: 64
+    optional: >-
+      If no secret is supplied on a one-off callbackWebhook, the request is
+      delivered without a signature.
+    replay_protection: >-
+      Recommended (not enforced by Vyond): reject timestamps older than a tolerance
+      such as ten minutes.
+subscription_model:
+  resource: Webhook
+  fields: [webhookId, name, url, events, status]
+  status_values: [enabled, disabled]
+  url_constraint: https only
+events:
+- name: video_generation.succeeded
+  description: A Vyond Go or AI-avatar content generation completed successfully.
+  data: [type, id, videoId, status, name, url, downloadUrl, expiredAt]
+  notes: >-
+    `type` is vyondGo or aiAvatar. `expiredAt` is when downloadUrl stops working.
+- name: video_generation.failed
+  description: A content generation failed.
+  data: [type, id, videoId, status, name, url]
+  error_codes: [UNSUITABLE_CONTENT]
+- name: video_export.succeeded
+  description: A video export conversion completed successfully.
+  source: Webhook.events enum in the OpenAPI
+- name: video_export.failed
+  description: A video export conversion failed.
+  source: Webhook.events enum in the OpenAPI
+- name: turbo_generation.succeeded
+  description: A Turbo text-prompt video generation completed successfully.
+  data: [id, status, turboThreadUrl, downloadUrl, creditConsumed, expiredAt]
+- name: turbo_generation.failed
+  description: A Turbo generation failed or timed out.
+  data: [id, status, turboThreadUrl]
+  error_codes: [TIMEOUT, GENERATION_FAILED]
+- name: turbo_generation.cancelled
+  description: A Turbo generation was cancelled.
+  data: [id, status, turboThreadUrl]
+  error_codes: [CANCELLED]
+  note: >-
+    Documented in the Turbo tag with a sample payload, but NOT present in the
+    Webhook.events enum a subscription can subscribe to — it appears to be
+    deliverable only to a one-off callbackWebhook. Recorded as published; the
+    divergence is Vyond's.
+envelope:
+  typescript: |
+    type WebhookEventBody = {
+        event: string;
+        data?: Record<string, unknown>;
+        error?: { code: string };
+    };
+  fields:
+  - {name: event, required: true}
+  - {name: data, required: false, description: shape differs per event type}
+  - {name: error, required: false, description: present on failure events, carries code}
+gaps:
+- No AsyncAPI document, so the event payloads are not machine-readable — they exist
+  only as sample JSON inside a markdown tag description.
+- No delivery-retry policy, no dead-letter behaviour and no delivery-log endpoint
+  is documented.
+- turbo_generation.cancelled is documented as an event but is absent from the
+  subscribable Webhook.events enum.
+- No webhook test/ping operation; a consumer cannot verify an endpoint without
+  running a real credit-consuming generation.
+counts:
+  events_documented: 6
+  events_subscribable: 6
+  management_operations: 4

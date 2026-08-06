@@ -1,0 +1,114 @@
+arazzo: 1.0.1
+info:
+  title: Provision and deactivate a Vyond user over SCIM 2.0
+  version: 1.0.0
+  summary: >-
+    Discover the SCIM schemas, search for an existing user by filter, create the
+    user, then deactivate them with a PATCH.
+sourceDescriptions:
+- name: vyond
+  url: ../openapi/vyond-openapi-original.json
+  type: openapi
+workflows:
+- workflowId: scim-provision-user
+  summary: Enterprise user lifecycle against the RFC 7643/7644 SCIM surface.
+  description: >-
+    Requires an Enterprise plan with SSO enabled and the SCIM API token generated
+    under Security > SCIM Provisioning. Vyond requires userName to equal the email
+    address. There is no SCIM DELETE — deactivation is a PATCH of active to false.
+    Groups are not supported.
+  inputs:
+    type: object
+    required: [email, givenName, familyName]
+    properties:
+      email:
+        type: string
+        format: email
+        description: Becomes both userName and the primary email — Vyond requires them to match.
+      givenName:
+        type: string
+      familyName:
+        type: string
+  steps:
+  - stepId: discover-schemas
+    description: Read the supported schemas rather than assuming the attribute set.
+    operationId: ScimController.getSchemas
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      schemas: $response.body#/Resources
+  - stepId: search-existing
+    description: >-
+      Check for an existing user before creating, so a 409 uniqueness conflict is
+      avoided rather than handled.
+    operationId: ScimController.getUsers
+    parameters:
+    - name: filter
+      in: query
+      value: $inputs.email
+    - name: startIndex
+      in: query
+      value: 1
+    - name: count
+      in: query
+      value: 1
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      totalResults: $response.body#/totalResults
+  - stepId: create-user
+    description: >-
+      Create the user. A 403 here has three distinct causes — SSO not enabled,
+      unsupported country, or insufficient team seats — distinguished only by
+      reason. A 409 with scimType uniqueness means the email is already registered.
+    operationId: ScimController.createUser
+    requestBody:
+      contentType: application/scim+json
+      payload:
+        schemas:
+        - 'urn:ietf:params:scim:schemas:core:2.0:User'
+        userName: $inputs.email
+        name:
+          givenName: $inputs.givenName
+          familyName: $inputs.familyName
+        emails:
+        - value: $inputs.email
+          primary: true
+        active: true
+    successCriteria:
+    - condition: $statusCode == 201
+    outputs:
+      userId: $response.body#/id
+  - stepId: read-user
+    description: Confirm the created user.
+    operationId: ScimController.getUser
+    parameters:
+    - name: userId
+      in: path
+      value: $steps.create-user.outputs.userId
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      active: $response.body#/active
+  - stepId: deactivate-user
+    description: >-
+      Deprovision. There is no SCIM DELETE operation in the Vyond contract, so
+      deactivation is a PATCH replacing active with false.
+    operationId: ScimController.patchUser
+    parameters:
+    - name: userId
+      in: path
+      value: $steps.create-user.outputs.userId
+    requestBody:
+      contentType: application/scim+json
+      payload:
+        schemas:
+        - 'urn:ietf:params:scim:api:messages:2.0:PatchOp'
+        Operations:
+        - op: replace
+          path: active
+          value: false
+    successCriteria:
+    - condition: $statusCode == 200
+  outputs:
+    userId: $steps.create-user.outputs.userId

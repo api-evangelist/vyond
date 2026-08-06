@@ -1,0 +1,141 @@
+generated: '2026-08-05'
+method: derived
+source: openapi/vyond-openapi-original.json
+enriched_from: https://api.vyond.com/doc/
+format: vyond-native
+rfc9457: false
+envelope:
+  schema: ApiErrorResponse
+  media_types: [application/json, 'application/scim+json']
+  required: [err]
+  optional: [reason, message, scimType, details]
+  detail_schema: ValidationDetail (property, message[])
+observed_error_codes:
+- code: INCORRECT_CREDENTIALS
+  reason: INVALID_CREDENTIALS
+  status: 401
+  evidence: 'live unauthenticated GET https://api.vyond.com/docs on 2026-08-05'
+- code: REQUEST_VALIDATION_FAILED
+  status: 400
+  note: >-
+    Named in the ApiErrorResponse schema as the code that populates details[].
+- code: UNSUITABLE_CONTENT
+  status: n/a (webhook event error.code)
+  note: video_generation.failed sample payload
+- code: GENERATION_FAILED
+  status: n/a (webhook event error.code)
+  note: turbo_generation.failed
+- code: TIMEOUT
+  status: n/a (webhook event error.code)
+  note: turbo_generation.failed
+- code: CANCELLED
+  status: n/a (webhook event error.code)
+  note: turbo_generation.cancelled
+x-gap: >-
+  Beyond the six codes above, Vyond declares the HTTP statuses and a per-operation
+  human description but publishes no enumerated registry of `err` values, and no
+  error-reference page. A consumer cannot branch on err without observing it in
+  production first.
+problems:
+- status: 400
+  title: Bad Request
+  media: application/json
+  variants:
+  - {detail: 'invalid export parameters', source_operation: 'openapi/vyond-openapi-original.json#VideoController.exportVideo'}
+  - {detail: 'conversionId must be a positive integer', source_operation: 'openapi/vyond-openapi-original.json#VideoController.getVideoExportDownload'}
+  - {detail: 'invalid or unsupported generation type or parameters', source_operation: 'openapi/vyond-openapi-original.json#ContentGenerationV2Controller.createGeneration'}
+  - {detail: 'invalid request or files validation failures', source_operation: 'openapi/vyond-openapi-original.json#TurboController.createTurbo'}
+- status: 400
+  title: Bad Request (SCIM)
+  media: application/scim+json
+  variants:
+  - {detail: 'userName must equal email address', source_operation: 'openapi/vyond-openapi-original.json#ScimController.createUser'}
+  - {detail: 'userName must equal email address', source_operation: 'openapi/vyond-openapi-original.json#ScimController.updateUser'}
+  - {detail: 'invalid patch operation or attribute value; may include details[] on validation failure', source_operation: 'openapi/vyond-openapi-original.json#ScimController.patchUser'}
+  - {detail: 'invalid filter or pagination parameters', source_operation: 'openapi/vyond-openapi-original.json#ScimController.getUsers'}
+- status: 401
+  title: Unauthorized
+  detail: missing or invalid credentials
+  media: [application/json, 'application/scim+json']
+  operations: 20
+  remediation: >-
+    Supply Authorization: Bearer <token>. REST expects an OAuth 2.0 access token or
+    Personal Access Token; SCIM expects the API token generated under Security >
+    SCIM Provisioning.
+- status: 402
+  title: Payment Required
+  detail: insufficient credits to perform the export
+  source_operation: 'openapi/vyond-openapi-original.json#VideoController.exportVideo'
+  remediation: >-
+    Credit balance is not readable through the API — 402 is the only signal.
+- status: 403
+  title: Forbidden
+  media: application/json
+  variants:
+  - {detail: 'missing required VYOND_GO scope or invalid owner type', source_operation: 'openapi/vyond-openapi-original.json#ContentGenerationController.createGeneration'}
+  - {detail: 'missing required VIDEO_EXPORT scope or access denied', source_operation: 'openapi/vyond-openapi-original.json#VideoController.exportVideo'}
+  - {detail: 'missing required VIDEO_EXPORT scope or access denied', source_operation: 'openapi/vyond-openapi-original.json#VideoController.getVideoExportDownload'}
+  - {detail: 'missing required scope, invalid owner type or no Turbo license', source_operation: 'openapi/vyond-openapi-original.json#TurboController.createTurbo'}
+  - {detail: 'missing required scope, invalid owner type or no Turbo license', source_operation: 'openapi/vyond-openapi-original.json#TurboController.getTurbo'}
+  - {detail: 'invalid owner type (non-user token)', source_operation: 'openapi/vyond-openapi-original.json#UserController.getUser'}
+  - {detail: 'invalid owner type (non-user token)', source_operation: 'openapi/vyond-openapi-original.json#WebhookController.getWebhooks'}
+  - {detail: 'invalid owner type (non-user token)', source_operation: 'openapi/vyond-openapi-original.json#WebhookController.createWebhook'}
+  - {detail: 'invalid owner type (non-user token)', source_operation: 'openapi/vyond-openapi-original.json#WebhookController.updateWebhook'}
+  - {detail: 'invalid owner type (non-user token)', source_operation: 'openapi/vyond-openapi-original.json#WebhookController.deleteWebhook'}
+  - {detail: 'missing required scope or invalid owner type, or user state validation failed', source_operation: 'openapi/vyond-openapi-original.json#ParameterController.getParameters'}
+- status: 403
+  title: Forbidden (SCIM)
+  media: application/scim+json
+  variants:
+  - {detail: 'SSO not enabled, unsupported country, or insufficient team seats', source_operation: 'openapi/vyond-openapi-original.json#ScimController.createUser'}
+  - {detail: 'user does not exist, unsupported country, or insufficient team seats', source_operation: 'openapi/vyond-openapi-original.json#ScimController.updateUser'}
+  - {detail: 'user does not exist, unsupported country, or insufficient team seats', source_operation: 'openapi/vyond-openapi-original.json#ScimController.patchUser'}
+  - {detail: 'you do not have permission to access this resource', source_operation: 'openapi/vyond-openapi-original.json#ScimController.getUsers'}
+  remediation: SCIM requires an Enterprise plan with SSO enabled.
+- status: 404
+  title: Not Found
+  variants:
+  - {detail: 'video does not exist or is not accessible', source_operation: 'openapi/vyond-openapi-original.json#VideoController.exportVideo'}
+  - {detail: 'video or conversion does not exist or is not accessible', source_operation: 'openapi/vyond-openapi-original.json#VideoController.getVideoExportDownload'}
+  - {detail: 'content generation task does not exist', source_operation: 'openapi/vyond-openapi-original.json#ContentGenerationV2Controller.getGeneration'}
+  - {detail: 'Turbo generation task not found for the user', source_operation: 'openapi/vyond-openapi-original.json#TurboController.getTurbo'}
+  - {detail: 'webhook does not exist or does not belong to the user', source_operation: 'openapi/vyond-openapi-original.json#WebhookController.updateWebhook'}
+  - {detail: 'webhook does not exist or does not belong to the user', source_operation: 'openapi/vyond-openapi-original.json#WebhookController.deleteWebhook'}
+  - {detail: 'user does not exist in the account', source_operation: 'openapi/vyond-openapi-original.json#ScimController.getUser'}
+  - {detail: 'schema ID does not exist', source_operation: 'openapi/vyond-openapi-original.json#ScimController.getSchema'}
+- status: 409
+  title: Conflict
+  variants:
+  - {detail: 'email or username already registered; scimType is uniqueness', source_operation: 'openapi/vyond-openapi-original.json#ScimController.createUser'}
+  - {detail: 'email or username already registered; scimType is uniqueness', source_operation: 'openapi/vyond-openapi-original.json#ScimController.updateUser'}
+  - {detail: 'email or username already registered; scimType is uniqueness', source_operation: 'openapi/vyond-openapi-original.json#ScimController.patchUser'}
+  - {detail: 'export conversion failed or has not completed yet', source_operation: 'openapi/vyond-openapi-original.json#VideoController.exportVideo'}
+  - {detail: 'export conversion failed or has not completed yet', source_operation: 'openapi/vyond-openapi-original.json#VideoController.getVideoExportDownload'}
+- status: 410
+  title: Gone
+  detail: export conversion was canceled
+  operations:
+  - 'openapi/vyond-openapi-original.json#VideoController.exportVideo'
+  - 'openapi/vyond-openapi-original.json#VideoController.getVideoExportDownload'
+- status: 422
+  title: Unprocessable Entity
+  detail: malware detected in uploaded files
+  source_operation: 'openapi/vyond-openapi-original.json#TurboController.createTurbo'
+  note: Turbo accepts up to 3 reference files of 100MB each; they are malware-scanned.
+- status: 429
+  title: Too Many Requests
+  variants:
+  - {detail: 'rate limit exceeded', operations: 18}
+  - {detail: 'export rate limit reached', source_operation: 'openapi/vyond-openapi-original.json#VideoController.exportVideo'}
+  - {detail: 'download rate limit reached', source_operation: 'openapi/vyond-openapi-original.json#VideoController.getVideoExportDownload'}
+  remediation: >-
+    No Retry-After or RateLimit-* header is documented; back off exponentially.
+- status: 500
+  title: Internal Server Error
+  detail: >-
+    Declared on every one of the 20 operations with an operation-specific message.
+counts:
+  operations: 20
+  operations_with_4xx: 20
+  operations_with_5xx: 20
+  distinct_statuses: [400, 401, 402, 403, 404, 409, 410, 422, 429, 500]

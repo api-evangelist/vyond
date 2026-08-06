@@ -1,0 +1,69 @@
+generated: '2026-08-05'
+method: searched
+source: https://product.vyond.com/feed/
+url: https://product.vyond.com/
+scheme: dated-posts
+scope: >-
+  Product releases for the Vyond application and content library. Vyond publishes NO
+  API changelog — nothing in this feed announces an API addition, deprecation or
+  breaking change, and the OpenAPI carries no version history. The
+  document-level info.version is 1.1.0 with no release notes behind it.
+categories:
+- Feature releases
+- Enhancements
+- Content releases
+- Library assets
+- Voices
+current_version: null
+breaking_change_policy: null
+entries:
+- date: '2026-07-30'
+  title: Generate Video Clips with Start and End Frame
+  category: Feature releases
+  url: https://product.vyond.com/generate-video-clips-with-start-and-end-frame/
+- date: '2026-07-30'
+  title: Freja and More Voices
+  category: Content releases
+  url: https://product.vyond.com/freja-and-more-voices/
+- date: '2026-07-30'
+  title: Bulk Delete Assets
+  category: Enhancements
+  url: https://product.vyond.com/bulk-delete-assets/
+- date: '2026-07-30'
+  title: Find Templates in Vyond Studio
+  category: Enhancements
+  url: https://product.vyond.com/find-templates-in-vyond-studio/
+- date: '2026-07-09'
+  title: Reimagine and Refine Images with Nano Banana 2 in Vyond
+  category: Feature releases
+  url: https://product.vyond.com/reimagine-and-refine-images-with-nano-banana-2-in-vyond/
+- date: '2026-07-09'
+  title: Storybook Kids Ready for Summer
+  category: Content releases
+  url: https://product.vyond.com/storybook-kids-ready-for-summer/
+- date: '2026-07-09'
+  title: Esko and More Voices
+  category: Content releases
+  url: https://product.vyond.com/esko-and-more-voices/
+- date: '2026-07-09'
+  title: Optimized Script Replacement
+  category: Enhancements
+  url: https://product.vyond.com/optimized-script-replacement/
+- date: '2026-07-09'
+  title: Smoother, Accessible UI
+  category: Enhancements
+  url: https://product.vyond.com/smoother-accessible-ui/
+- date: '2026-06-16'
+  title: Office Content in Storybook Style
+  category: Content releases
+  url: https://product.vyond.com/office-content-in-storybook-style/
+x-gap: >-
+  An API consumer has no way to learn that v2 content generation shipped, that Turbo
+  gained a webhook, or that a response field changed. The product feed is a
+  marketing surface; the API has no equivalent.
+x-evidence:
+  fetched: '2026-08-05'
+  url: https://product.vyond.com/feed
+  http_status: 200
+  content_type: application/rss+xml
+  items_in_feed: 10

@@ -1,0 +1,12 @@
+generated: '2026-08-05'
+method: derived
+source: openapi/vyond-openapi-original.json
+summary:
+  types:
+  - http
+schemes:
+- name: bearer
+  type: http
+  scheme: bearer
+  sources:
+  - openapi/vyond-openapi-original.json

@@ -1,0 +1,75 @@
+generated: '2026-08-05'
+method: searched
+probe: true
+url: https://www.vyond.com/trust-center/
+also: https://www.vyond.com/solutions/enterprise/security/
+certifications:
+- ISO/IEC 27001:2022
+- FedRAMP
+- PCI DSS Level 1
+- EU-U.S. Data Privacy Framework
+- Swiss-U.S. Data Privacy Framework
+- GDPR
+- CCPA
+- VPAT / Section 508 (ACR)
+certification_detail:
+- name: ISO/IEC 27001:2022
+  scope: all locations and products
+  artifacts: [certificate, statement of applicability]
+  availability: direct download
+- name: FedRAMP
+  initial_certification: '2025-06'
+  id: FR2433985791
+- name: PCI DSS Level 1
+  note: >-
+    Maintained for payment processing. Vyond states it does not itself collect,
+    accept, handle, process, receive, transmit or store payment card information.
+- name: Data Privacy Framework
+  validator: TRUSTe
+  frameworks: [EU-U.S. DPF, Swiss-U.S. DPF]
+documents:
+  direct_download:
+  - ISO 27001 Certificate
+  - ISO 27001 Statement of Applicability
+  - AI FAQ and Ethics Statement
+  - Data Partitioning Overview
+  under_nda:
+  - Information Security Policy
+  - Business Continuity Plan
+  - Penetration test results summary
+  - Vulnerability scan results summary
+  - HECVAT
+  - CAIQ
+subprocessors: https://think.vyond.com/subprocessors
+acceptable_use_policy: https://www.vyond.com/terms/#h-vyond-acceptable-use-policy-aup
+secure_suite: https://www.vyond.com/vyond-secure-suite/
+security_practices:
+  hosting: AWS
+  network: segregated VPCs, deny-by-default firewalls, least-privilege access
+  testing: regular automated and manual vulnerability assessments by independent firms
+  monitoring: 24/7 monitoring of security-related events by dedicated teams
+  sso: Office 365, Google SSO, and locally administered SSO
+  provisioning: SCIM 2.0 (Enterprise plans with SSO enabled)
+gaps:
+- >-
+  No SOC 2 report of Vyond's own. The trust center and enterprise security page cite
+  AWS's SOC 1 / SOC 2 attestations for the underlying infrastructure — an
+  infrastructure claim, not a Vyond control attestation.
+- >-
+  No published vulnerability disclosure policy, no bug bounty, no security contact
+  address and no RFC 9116 security.txt on any Vyond host. A researcher with a
+  finding has no documented route in; the trust center directs all inquiries to a
+  sales-inquiry form.
+- No public status page and no published SLA or uptime commitment.
+evidence:
+- {source: 'https://www.vyond.com/trust-center/', status: 200, keywords: ['iso 27001', 'fedramp', 'data privacy framework', 'vpat', 'trust center']}
+- {source: 'https://www.vyond.com/solutions/enterprise/security/', status: 200, keywords: ['iso/iec 27001', 'gdpr', 'ccpa', 'pci dss level 1', 'penetration testing']}
+- {source: 'https://think.vyond.com/subprocessors', status: 200}
+- {source: 'https://www.vyond.com/vyond-secure-suite/', status: 200}
+x-evidence:
+  checked: '2026-08-05'
+  note: >-
+    probe-security-programs.py reported trust=none — it checks trust.<domain>,
+    security.<domain> and /trust|/security|/compliance, none of which exist here.
+    The trust center is at the non-standard path /trust-center/ and was found via
+    the sitemap. Recorded as searched, with the probed URL and status above.

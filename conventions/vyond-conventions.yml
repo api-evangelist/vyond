@@ -1,0 +1,157 @@
+generated: '2026-08-05'
+method: searched
+source: https://api.vyond.com/doc/
+derived_from: openapi/vyond-openapi-original.json
+summary: >-
+  Two conventions regimes live behind one host. The SCIM 2.0 surface follows RFC
+  7643/7644 verbatim — scim+json media type, startIndex/count pagination, SCIM
+  filter grammar, PATCH operations, scimType error discriminators. The REST surface
+  is a Vyond-native convention set: URI-path versioning, bearer auth, a flat
+  {err, reason, message} error envelope, and asynchronous long-running jobs
+  resolved either by polling a task id or by an HMAC-SHA256-signed webhook.
+
+authentication:
+  style: bearer
+  header: 'Authorization: Bearer <token>'
+  detail: authentication/vyond-authentication.yml
+  scopes: scopes/vyond-scopes.yml
+
+versioning:
+  scheme: uri-path
+  form: https://api.vyond.com/rest/{version}/{path}
+  versions_live: [v1, v2]
+  notes: >-
+    v1 and v2 coexist for content generation — POST /rest/v1/generations/ and
+    POST /rest/v2/generations/ are both documented and both live. v2 adds a
+    readable task (GET /rest/v2/generations/{id}); v1 is write-only. SCIM is pinned
+    at /scim/v2/ per the SCIM 2.0 standard, not Vyond's own version train. The
+    OpenAPI document itself carries info.version 1.1.0, which tracks the
+    documentation, not the API path version.
+  no_version_header: true
+  no_date_versioning: true
+
+idempotency:
+  supported: false
+  evidence: >-
+    No Idempotency-Key header, no idempotency parameter, and no idempotency
+    discussion anywhere in the OpenAPI or the Help Center. Every write operation
+    (createGeneration, createTurbo, exportVideo, createWebhook, SCIM createUser) is
+    unguarded against retry. This matters more than usual here: createGeneration,
+    createTurbo and exportVideo all consume account credits, and exportVideo returns
+    402 Payment Required when credits run out — so a naive client retry on a
+    timeout can silently double-spend.
+  x-gap: >-
+    Highest-value single fix available to Vyond. An Idempotency-Key on the four
+    credit-consuming POSTs would close a real double-charge path.
+
+pagination:
+  rest:
+    supported: false
+    note: >-
+      No REST collection endpoint paginates. GET /rest/v1/webhooks/ returns the
+      full list unbounded.
+  scim:
+    style: index-based (RFC 7644 §3.4.2.4)
+    params:
+    - {name: startIndex, in: query, description: 1-based index of the first result}
+    - {name: count, in: query, description: maximum number of results per page}
+    response_fields: [totalResults, itemsPerPage, startIndex, Resources]
+    applies_to: [ScimController.getUsers, ScimController.getSchemas]
+
+filtering:
+  scim:
+    param: filter
+    grammar: SCIM 2.0 filter (RFC 7644 §3.4.2.2)
+    error: 400 with reason carrying the invalid-filter message
+  rest:
+    param: parameterKeys / feature on GET /rest/v1/parameters/
+    note: key-selection, not a general filter grammar
+
+error_envelope:
+  format: vyond-native
+  rfc9457: false
+  media_types:
+  - {surface: REST, type: application/json}
+  - {surface: SCIM, type: application/scim+json}
+  schema: ApiErrorResponse
+  fields:
+  - {name: err, required: true, description: enumerated error code}
+  - {name: reason, required: false, description: why the error occurred}
+  - {name: message, required: false, description: free-text alternative to reason}
+  - {name: scimType, required: false, description: 'SCIM error discriminator, e.g. uniqueness on 409'}
+  - {name: details, required: false, description: 'ValidationDetail[] present when err is REQUEST_VALIDATION_FAILED'}
+  observed_live:
+    request: 'GET https://api.vyond.com/docs (unauthenticated)'
+    status: 401
+    body: '{"err":"INCORRECT_CREDENTIALS","reason":"INVALID_CREDENTIALS"}'
+  catalog: errors/vyond-problem-types.yml
+
+rate_limiting:
+  documented: true
+  signal: 429 Too Many Requests
+  coverage: >-
+    429 is declared on 18 of the 20 operations, plus two operation-specific variants
+    — "export rate limit reached" on exportVideo and "download rate limit reached"
+    on getVideoExportDownload.
+  published_limits: false
+  headers: false
+  x-gap: >-
+    Vyond declares the 429 but publishes no numeric limit, no window, and no
+    RateLimit-* / Retry-After response headers. An agent cannot pace itself; it can
+    only back off after being told no.
+
+async_jobs:
+  pattern: create-then-resolve
+  create_operations:
+  - {operationId: ContentGenerationV2Controller.createGeneration, resolve: ContentGenerationV2Controller.getGeneration}
+  - {operationId: TurboController.createTurbo, resolve: TurboController.getTurbo}
+  - {operationId: VideoController.exportVideo, resolve: VideoController.getVideoExportDownload}
+  resolution_modes:
+  - polling by task id
+  - webhook callback (registered subscription, or a one-off callbackWebhook supplied on the create request)
+  statuses: [queued, processing, completed, failed, cancelled]
+  expiring_artifacts: >-
+    Download URLs are time-limited. Both the Turbo and export payloads carry an
+    expiry (expiredAt / expireAt) after which the downloadUrl is dead.
+
+webhooks:
+  catalog: asyncapi/vyond-webhooks.yml
+  signature:
+    algorithm: HMAC-SHA256
+    signed_value: '<x-vyond-request-timestamp>:<raw request body>'
+    headers:
+    - x-vyond-signature
+    - x-vyond-request-timestamp
+    encoding: hex
+    replay_protection: >-
+      Vyond recommends rejecting timestamps older than a tolerance such as ten
+      minutes. The tolerance is the consumer's to enforce; Vyond does not enforce it.
+    secret: 64 chars, digits and English alphabet only, supplied by the consumer
+    optional: >-
+      If no secret is supplied on a one-off callbackWebhook, the event is delivered
+      unsigned.
+  transport: HTTPS only (webhook url must be https)
+
+request_tracing:
+  request_id_header: false
+  note: No correlation/request-id header is documented on requests or responses.
+
+field_expansion:
+  supported: false
+
+metadata:
+  supported: false
+
+credits:
+  model: >-
+    Generation, Turbo and export operations consume account credits. Turbo responses
+    report creditConsumed. Export returns 402 Payment Required on insufficient
+    credits. Credit balance is not readable through the API.
+
+cross_links:
+  authentication: authentication/vyond-authentication.yml
+  scopes: scopes/vyond-scopes.yml
+  errors: errors/vyond-problem-types.yml
+  lifecycle: lifecycle/vyond-lifecycle.yml
+  webhooks: asyncapi/vyond-webhooks.yml
+  conformance: conformance/vyond-conformance.yml

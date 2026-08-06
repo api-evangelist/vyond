@@ -1,0 +1,31 @@
+generated: '2026-08-05'
+method: generated
+source: openapi/vyond-openapi-original.json
+note: >-
+  Native Arazzo 1.0.1 workflows stitching Vyond's own operations. Every
+  operationId used was verified to exist verbatim in the published OpenAPI at
+  https://api.vyond.com/doc/openapi.json. No example credentials or test values are
+  embedded — Vyond publishes no sandbox, no test tokens and no magic identifiers,
+  so every workflow runs against live, credit-consuming production endpoints.
+workflows:
+- file: vyond-generate-and-export-video.yml
+  workflowId: generate-and-export-video
+  title: Generate a Vyond video and export it
+  summary: >-
+    Read the parameter vocabulary, create a Vyond Go or AI-avatar generation, poll
+    to completion, export to mp4/webm/gif/SCORM, retrieve the expiring download URL.
+  operations: 5
+- file: vyond-turbo-with-webhook.yml
+  workflowId: turbo-generate-with-webhook
+  title: Turbo text-to-video with a webhook subscription
+  summary: >-
+    Register a Turbo event subscription, submit a text prompt, and poll as a
+    fallback until the task reaches a terminal status.
+  operations: 3
+- file: vyond-scim-provision-user.yml
+  workflowId: scim-provision-user
+  title: Provision and deactivate a Vyond user over SCIM 2.0
+  summary: >-
+    Discover schemas, search by filter, create the user, then deactivate with a
+    PATCH — there is no SCIM DELETE.
+  operations: 5
