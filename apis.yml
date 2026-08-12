@@ -31,23 +31,370 @@ tags:
 - Enterprise
 - Media
 apis:
-- aid: vyond:vyond-api
-  name: Vyond API
-  description: 'The Vyond API lets a platform create Vyond Go and AI-avatar videos,
-    run Turbo text-prompt video generation, export videos, read feature parameters,
-    manage users over SCIM 2.0, and subscribe to HMAC-signed webhook events — all
-    without using the Vyond web application.'
+- aid: vyond:vyond-content-generation-api
+  name: Vyond Content Generation API
+  description: APIs for content generation
   humanURL: https://api.vyond.com/doc/
   baseURL: https://api.vyond.com
   tags:
-  - Video Generation
   - Content Generation
+  properties:
+  - type: OpenAPI
+    url: openapi/vyond-content-generation-api-openapi.yml
+  - type: Documentation
+    url: https://api.vyond.com/doc/
+  - type: APIReference
+    url: https://api.vyond.com/doc/
+  - type: GettingStarted
+    url: https://help.vyond.com/hc/en-us/articles/51873650828052-How-do-I-use-the-Vyond-API
+- aid: vyond:vyond-parameter-api
+  name: Vyond Parameter API
+  description: APIs for getting parameters information
+  humanURL: https://api.vyond.com/doc/
+  baseURL: https://api.vyond.com
+  tags:
+  - Parameter
+  properties:
+  - type: OpenAPI
+    url: openapi/vyond-parameter-api-openapi.yml
+  - type: Documentation
+    url: https://api.vyond.com/doc/
+  - type: APIReference
+    url: https://api.vyond.com/doc/
+  - type: GettingStarted
+    url: https://help.vyond.com/hc/en-us/articles/51873650828052-How-do-I-use-the-Vyond-API
+- aid: vyond:vyond-scim-api
+  name: Vyond SCIM API
+  description: SCIM 2.0 APIs
+  humanURL: https://api.vyond.com/doc/
+  baseURL: https://api.vyond.com
+  tags:
   - SCIM
-  - Webhooks
+  properties:
+  - type: OpenAPI
+    url: openapi/vyond-scim-api-openapi.yml
+  - type: Documentation
+    url: https://api.vyond.com/doc/
+  - type: APIReference
+    url: https://api.vyond.com/doc/
+  - type: GettingStarted
+    url: https://help.vyond.com/hc/en-us/articles/51873650828052-How-do-I-use-the-Vyond-API
+- aid: vyond:vyond-turbo-api
+  name: Vyond Turbo API
+  description: >-
+    APIs for creating and tracking Turbo video generation tasks.
+
+
+    Turbo lets you generate a video from a text prompt, optionally grounded on reference files (e.g. `.txt`,
+    `.pdf`, `.docx`, `.pptx`). Submit a prompt to start a task, then poll the task by its ID to retrieve
+    the status and, once completed, the download URL of the generated video.
+
+
+    ## Webhook events
+
+
+    Instead of polling, you can listen to webhook events to be notified when a Turbo task completes. Webhook
+    events are always emitted for every task, so you can register a webhook subscription (owner type `user`)
+    before the task completes, or supply a one-off `callbackWebhook` in the create request.
+
+
+    | Event                        | Description                                                                                                         |
+
+    | ---------------------------- | -------------------------------------------------------------------------------------------------------------------
+    |
+
+    | `turbo_generation.succeeded` | The Turbo video generation completed successfully. `data` contains
+    `downloadUrl`, `creditConsumed` and `expiredAt`. |
+
+    | `turbo_generation.failed`    | The Turbo video generation failed (or timed out). An `error.code`
+    is included.                                      |
+
+
+    The event `data` contains `id` (the task/thread ID), `status` and `turboThreadUrl`. Refer to [Webhook
+    events](#tag/Webhook/Webhook-events) for the event body type definition, signature verification and
+    sample payloads.
+  humanURL: https://api.vyond.com/doc/
+  baseURL: https://api.vyond.com
+  tags:
+  - Turbo
+  properties:
+  - type: OpenAPI
+    url: openapi/vyond-turbo-api-openapi.yml
+  - type: Documentation
+    url: https://api.vyond.com/doc/
+  - type: APIReference
+    url: https://api.vyond.com/doc/
+  - type: GettingStarted
+    url: https://help.vyond.com/hc/en-us/articles/51873650828052-How-do-I-use-the-Vyond-API
+- aid: vyond:vyond-user-api
+  name: Vyond User API
+  description: APIs related to user
+  humanURL: https://api.vyond.com/doc/
+  baseURL: https://api.vyond.com
+  tags:
+  - User
+  properties:
+  - type: OpenAPI
+    url: openapi/vyond-user-api-openapi.yml
+  - type: Documentation
+    url: https://api.vyond.com/doc/
+  - type: APIReference
+    url: https://api.vyond.com/doc/
+  - type: GettingStarted
+    url: https://help.vyond.com/hc/en-us/articles/51873650828052-How-do-I-use-the-Vyond-API
+- aid: vyond:vyond-video-api
+  name: Vyond Video API
+  description: The Video API from Vyond — 1 operation(s) for video.
+  humanURL: https://api.vyond.com/doc/
+  baseURL: https://api.vyond.com
+  tags:
+  - Video
+  properties:
+  - type: OpenAPI
+    url: openapi/vyond-video-api-openapi.yml
+  - type: Documentation
+    url: https://api.vyond.com/doc/
+  - type: APIReference
+    url: https://api.vyond.com/doc/
+  - type: GettingStarted
+    url: https://help.vyond.com/hc/en-us/articles/51873650828052-How-do-I-use-the-Vyond-API
+- aid: vyond:vyond-video-export-api
+  name: Vyond Video Export API
+  description: APIs for video export
+  humanURL: https://api.vyond.com/doc/
+  baseURL: https://api.vyond.com
+  tags:
   - Video Export
   properties:
   - type: OpenAPI
-    url: openapi/vyond-openapi-original.json
+    url: openapi/vyond-video-export-api-openapi.yml
+  - type: Documentation
+    url: https://api.vyond.com/doc/
+  - type: APIReference
+    url: https://api.vyond.com/doc/
+  - type: GettingStarted
+    url: https://help.vyond.com/hc/en-us/articles/51873650828052-How-do-I-use-the-Vyond-API
+- aid: vyond:vyond-webhook-api
+  name: Vyond Webhook API
+  description: >-
+    APIs for managing webhook
+
+
+    ## Verifying Vyond Signatures
+
+
+    Vyond webhook events are sent with a signature, which the destination server can use to verify that
+    the events are authentic from Vyond. It is recommended to verify the signature before processing each
+    webhook event.
+
+
+    ### How to verify our signatures?
+
+
+    1. Fetch the raw request body.
+
+        ```
+        const express = require('express');
+        const app = express();
+
+        app.use(express.json({
+            verify: (req, res, buf, encoding) => {
+                req.rawBody = buf.toString(encoding || 'utf-8');
+            },
+        }));
+        ```
+
+    2. Extract the timestamp from the request header `x-vyond-request-timestamp` and the signature from
+    the request header `x-vyond-signature`.
+
+        ```
+        const timestamp = req.headers['x-vyond-request-timestamp'];
+        const signature = req.headers['x-vyond-signature'];
+        ```
+
+    3. Create a message by concatenating the timestamp and the raw request body together, using a colon
+    (:) as a delimiter.
+
+        ```
+        const message = `${timestamp}:${req.rawBody}`;
+        ```
+
+    4. Verify the signature, an HMAC created using the SHA256 hash function, using the webhook secret
+    as a key.
+
+        ```
+        const { webcrypto } = require('node:crypto');
+
+        const secret = 'your_webhook_secret';
+        const enc = new TextEncoder();
+        const key = await webcrypto.subtle.importKey(
+            'raw',
+            enc.encode(secret),
+            {
+                name: 'HMAC',
+                hash: { name: 'SHA-256' },
+            },
+            false,
+            ['verify'],
+        );
+
+        const isValid = await webcrypto.subtle.verify(
+            { name: 'HMAC' },
+            key,
+            Buffer.from(signature, 'hex'),
+            enc.encode(message),
+        );
+        ```
+
+    5. To enhance security and mitigate the risk of replay attacks, consider verifying the timestamp.
+    Reject requests containing timestamps older than a defined tolerance, such as ten minutes, to ensure
+    that the events are recent and valid.
+
+
+    ## Webhook events
+
+
+    ### Event body type definition
+
+
+    ```typescript
+
+    type WebhookEventBody = {
+        event: string; // Refer to API for possible event types
+        data?: Record<string, unknown>; // Differ based on event type
+
+        // Exists if it is a failure event
+        error?: {
+            code: string;
+        };
+    };
+
+    ```
+
+
+    ### Sample events
+
+
+    **Video generation succeeded**
+
+
+    Note: `expiredAt` is when the `downloadUrl` will expire.
+
+
+    ```json
+
+    {
+        "event": "video_generation.succeeded",
+        "data": {
+            "type": "vyondGo",
+            "id": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+            "videoId": "yyyyyyyy-yyyy-yyyy-yyyy-yyyyyyyyyyyy",
+            "status": "success",
+            "name": "Video name",
+            "url": "https://app.vyond.org/videos/yyyyyyyy-yyyy-yyyy-yyyy-yyyyyyyyyyyy",
+            "downloadUrl": "{downloadUrl}",
+            "expiredAt": "2025-01-28T01:42:05.831Z"
+        }
+    }
+
+    ```
+
+
+    **Video generation failed**
+
+
+    ```json
+
+    {
+        "event": "video_generation.failed",
+        "data": {
+            "type": "vyondGo",
+            "id": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+            "videoId": null,
+            "status": "failed",
+            "name": null,
+            "url": null
+        },
+        "error": {
+            "code": "UNSUITABLE_CONTENT"
+        }
+    }
+
+    ```
+
+
+    **Turbo generation succeeded**
+
+
+    Note: `id` is the Turbo video generation task (thread) ID. `expiredAt` is when the `downloadUrl` will
+    expire. `turboThreadUrl` is the webpage URL for you to view the chat and progress.
+
+
+    ```json
+
+    {
+        "event": "turbo_generation.succeeded",
+        "data": {
+            "id": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+            "status": "completed",
+            "turboThreadUrl": "https://app.vyond.com/turbo/t/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+            "downloadUrl": "{downloadUrl}",
+            "creditConsumed": 10,
+            "expiredAt": "2025-01-28T01:42:05.831Z"
+        }
+    }
+
+    ```
+
+
+    **Turbo generation failed**
+
+
+    Note: `error.code`: `TIMEOUT` / `GENERATION_FAILED`.
+
+
+    ```json
+
+    {
+        "event": "turbo_generation.failed",
+        "data": {
+            "id": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+            "status": "failed",
+            "turboThreadUrl": "https://app.vyond.com/turbo/t/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+        },
+        "error": {
+            "code": "GENERATION_FAILED"
+        }
+    }
+
+    ```
+
+
+    **Turbo generation cancelled**
+
+
+    ```json
+
+    {
+        "event": "turbo_generation.cancelled",
+        "data": {
+            "id": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+            "status": "cancelled",
+            "turboThreadUrl": "https://app.vyond.com/turbo/t/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+        },
+        "error": {
+            "code": "CANCELLED"
+        }
+    }
+
+    ```
+  humanURL: https://api.vyond.com/doc/
+  baseURL: https://api.vyond.com
+  tags:
+  - Webhook
+  properties:
+  - type: OpenAPI
+    url: openapi/vyond-webhook-api-openapi.yml
   - type: Documentation
     url: https://api.vyond.com/doc/
   - type: APIReference
