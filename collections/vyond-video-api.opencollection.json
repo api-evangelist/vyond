@@ -1,0 +1,41 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Vyond API Documentation Video API",
+    "version": "1.1.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Video",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get video export download URL",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/rest/v1/videos/:videoId/exports/:conversionId",
+            "params": [
+              {
+                "name": "videoId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "conversionId",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Retrieve the download URL for a completed video export"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

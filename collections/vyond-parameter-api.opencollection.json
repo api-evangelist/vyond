@@ -1,0 +1,45 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Vyond API Documentation Parameter API",
+    "version": "1.1.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Parameter",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get API parameters information",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/rest/v1/parameters/",
+            "params": [
+              {
+                "name": "feature",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "parameterKeys",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Get information (e.g. data type and values) of API parameters, some values may be filtered based on user plan and account available features."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

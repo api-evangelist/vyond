@@ -1,0 +1,390 @@
+{
+  "item": [
+    {
+      "id": "7b7ce9e1-9a28-4d00-b2f7-0fac7b7979b9",
+      "name": "Parameter",
+      "description": {
+        "content": "APIs for getting parameters information\n",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "d4fd3c1a-e587-477a-a889-8db35b879ebb",
+          "name": "Get API parameters information",
+          "request": {
+            "name": "Get API parameters information",
+            "description": {
+              "content": "Get information (e.g. data type and values) of API parameters, some values may be filtered based on user plan and account available features.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "rest",
+                "v1",
+                "parameters",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "feature",
+                  "value": "<string>",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "parameterKeys",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "parameterKeys",
+                  "value": "<string>"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "1bba5db0-e2a6-4c18-bb7e-97704ab4ee81",
+              "name": "API parameters information",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "rest",
+                    "v1",
+                    "parameters",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "feature",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "parameterKeys",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "parameterKeys",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"parameters\": [\n    {\n      \"key\": \"avatarBackground\",\n      \"name\": \"string\",\n      \"schema\": {},\n      \"values\": [\n        {\n          \"value\": {},\n          \"name\": \"string\",\n          \"properties\": {}\n        },\n        {\n          \"value\": {},\n          \"name\": \"string\",\n          \"properties\": {}\n        }\n      ]\n    },\n    {\n      \"key\": \"voiceProvider\",\n      \"name\": \"string\",\n      \"schema\": {},\n      \"values\": [\n        {\n          \"value\": {},\n          \"name\": \"string\",\n          \"properties\": {}\n        },\n        {\n          \"value\": {},\n          \"name\": \"string\",\n          \"properties\": {}\n        }\n      ]\n    }\n  ],\n  \"components\": {\n    \"schemas\": {}\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6ad25506-25f7-4a16-9f99-ac202c4957f7",
+              "name": "Unauthorized - missing or invalid credentials",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "rest",
+                    "v1",
+                    "parameters",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "feature",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "parameterKeys",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "parameterKeys",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"err\": \"string\",\n  \"reason\": \"string\",\n  \"message\": \"string\",\n  \"scimType\": \"string\",\n  \"details\": [\n    {\n      \"property\": \"string\",\n      \"message\": [\n        \"string\",\n        \"string\"\n      ]\n    },\n    {\n      \"property\": \"string\",\n      \"message\": [\n        \"string\",\n        \"string\"\n      ]\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "dcba3d35-44db-4b6a-8d09-877e7758df9f",
+              "name": "Forbidden - missing required scope or invalid owner type, or user state validation failed",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "rest",
+                    "v1",
+                    "parameters",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "feature",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "parameterKeys",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "parameterKeys",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"err\": \"string\",\n  \"reason\": \"string\",\n  \"message\": \"string\",\n  \"scimType\": \"string\",\n  \"details\": [\n    {\n      \"property\": \"string\",\n      \"message\": [\n        \"string\",\n        \"string\"\n      ]\n    },\n    {\n      \"property\": \"string\",\n      \"message\": [\n        \"string\",\n        \"string\"\n      ]\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "fd9b2396-05e2-40d9-adce-2787f78dc0a5",
+              "name": "Too Many Requests - rate limit exceeded",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "rest",
+                    "v1",
+                    "parameters",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "feature",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "parameterKeys",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "parameterKeys",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"err\": \"string\",\n  \"reason\": \"string\",\n  \"message\": \"string\",\n  \"scimType\": \"string\",\n  \"details\": [\n    {\n      \"property\": \"string\",\n      \"message\": [\n        \"string\",\n        \"string\"\n      ]\n    },\n    {\n      \"property\": \"string\",\n      \"message\": [\n        \"string\",\n        \"string\"\n      ]\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "fab34af5-369c-4a07-8c5c-a07c48dc60b1",
+              "name": "Internal Server Error - unexpected error while retrieving parameters",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "rest",
+                    "v1",
+                    "parameters",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "feature",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "parameterKeys",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "parameterKeys",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"err\": \"string\",\n  \"reason\": \"string\",\n  \"message\": \"string\",\n  \"scimType\": \"string\",\n  \"details\": [\n    {\n      \"property\": \"string\",\n      \"message\": [\n        \"string\",\n        \"string\"\n      ]\n    },\n    {\n      \"property\": \"string\",\n      \"message\": [\n        \"string\",\n        \"string\"\n      ]\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "a7cbc5f8-6ec4-4007-9f5c-099dd0399310",
+    "name": "Vyond API Documentation Parameter API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "APIs for getting parameters information\n",
+      "type": "text/plain"
+    }
+  }
+}

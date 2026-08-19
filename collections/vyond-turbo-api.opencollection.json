@@ -1,0 +1,59 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Vyond API Documentation Turbo API",
+    "version": "1.1.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Turbo",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create Turbo video generation",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/rest/v1/turbo/",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Create a new Turbo video generation task from a prompt and optional reference files"
+        },
+        {
+          "info": {
+            "name": "Get Turbo video generation",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/rest/v1/turbo/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Get the status and download URL of a Turbo video generation task by ID"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

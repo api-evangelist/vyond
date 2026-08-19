@@ -1,0 +1,847 @@
+{
+  "item": [
+    {
+      "id": "dea5108a-8cf5-4e9a-85e9-6c06c2dc04a1",
+      "name": "Turbo",
+      "description": {
+        "content": "APIs for creating and tracking Turbo video generation tasks.\n\nTurbo lets you generate a video from a text prompt, optionally grounded on reference files (e.g. `.txt`, `.pdf`, `.docx`, `.pptx`). Submit a prompt to start a task, then poll the task by its ID to retrieve the status and, once completed, the download URL of the generated video.\n\n## Webhook events\n\nInstead of polling, you can listen to webhook events to be notified when a Turbo task completes. Webhook events are always emitted for every task, so you can register a webhook subscription (owner type `user`) before the task completes, or supply a one-off `callbackWebhook` in the create request.\n\n| Event                        | Description                                                                                                         |\n| ---------------------------- | ------------------------------------------------------------------------------------------------------------------- |\n| `turbo_generation.succeeded` | The Turbo video generation completed successfully. `data` contains `downloadUrl`, `creditConsumed` and `expiredAt`. |\n| `turbo_generation.failed`    | The Turbo video generation failed (or timed out). An `error.code` is included.                                      |\n\nThe event `data` contains `id` (the task/thread ID), `status` and `turboThreadUrl`. Refer to [Webhook events](#tag/Webhook/Webhook-events) for the event body type definition, signature verification and sample payloads.\n",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "40b9488a-3ab0-4313-a0b4-93d297c851e5",
+          "name": "Create Turbo video generation",
+          "request": {
+            "name": "Create Turbo video generation",
+            "description": {
+              "content": "Create a new Turbo video generation task from a prompt and optional reference files",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "rest",
+                "v1",
+                "turbo",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"prompt\": \"<string>\",\n  \"mode\": \"STILL_IMAGE\",\n  \"files\": [\n    \"<binary>\",\n    \"<binary>\"\n  ],\n  \"callbackWebhook\": {\n    \"url\": \"<url>\",\n    \"secret\": \"<string>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "33c46317-e13b-4198-8aa6-0cc4e918d711",
+              "name": "Object with id = Turbo video generation task ID",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "rest",
+                    "v1",
+                    "turbo",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"prompt\": \"<string>\",\n  \"mode\": \"STILL_IMAGE\",\n  \"files\": [\n    \"<binary>\",\n    \"<binary>\"\n  ],\n  \"callbackWebhook\": {\n    \"url\": \"<url>\",\n    \"secret\": \"<string>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4fbe49f7-6fe1-45e3-86e3-1f3e79fa453d",
+              "name": "Bad Request - invalid request or files validation failures",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "rest",
+                    "v1",
+                    "turbo",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"prompt\": \"<string>\",\n  \"mode\": \"STILL_IMAGE\",\n  \"files\": [\n    \"<binary>\",\n    \"<binary>\"\n  ],\n  \"callbackWebhook\": {\n    \"url\": \"<url>\",\n    \"secret\": \"<string>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"err\": \"string\",\n  \"reason\": \"string\",\n  \"message\": \"string\",\n  \"scimType\": \"string\",\n  \"details\": [\n    {\n      \"property\": \"string\",\n      \"message\": [\n        \"string\",\n        \"string\"\n      ]\n    },\n    {\n      \"property\": \"string\",\n      \"message\": [\n        \"string\",\n        \"string\"\n      ]\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "bbafb3c3-f352-4b30-a708-495c2df63c78",
+              "name": "Unauthorized - missing or invalid credentials",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "rest",
+                    "v1",
+                    "turbo",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"prompt\": \"<string>\",\n  \"mode\": \"STILL_IMAGE\",\n  \"files\": [\n    \"<binary>\",\n    \"<binary>\"\n  ],\n  \"callbackWebhook\": {\n    \"url\": \"<url>\",\n    \"secret\": \"<string>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"err\": \"string\",\n  \"reason\": \"string\",\n  \"message\": \"string\",\n  \"scimType\": \"string\",\n  \"details\": [\n    {\n      \"property\": \"string\",\n      \"message\": [\n        \"string\",\n        \"string\"\n      ]\n    },\n    {\n      \"property\": \"string\",\n      \"message\": [\n        \"string\",\n        \"string\"\n      ]\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "29f2b94d-72fe-4967-bcba-191759178e09",
+              "name": "Forbidden - missing required scope, invalid owner type or no Turbo license",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "rest",
+                    "v1",
+                    "turbo",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"prompt\": \"<string>\",\n  \"mode\": \"STILL_IMAGE\",\n  \"files\": [\n    \"<binary>\",\n    \"<binary>\"\n  ],\n  \"callbackWebhook\": {\n    \"url\": \"<url>\",\n    \"secret\": \"<string>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"err\": \"string\",\n  \"reason\": \"string\",\n  \"message\": \"string\",\n  \"scimType\": \"string\",\n  \"details\": [\n    {\n      \"property\": \"string\",\n      \"message\": [\n        \"string\",\n        \"string\"\n      ]\n    },\n    {\n      \"property\": \"string\",\n      \"message\": [\n        \"string\",\n        \"string\"\n      ]\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c527993b-6729-487a-b8b5-a31bbab42df8",
+              "name": "Unprocessable Entity - malware detected in uploaded files",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "rest",
+                    "v1",
+                    "turbo",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"prompt\": \"<string>\",\n  \"mode\": \"STILL_IMAGE\",\n  \"files\": [\n    \"<binary>\",\n    \"<binary>\"\n  ],\n  \"callbackWebhook\": {\n    \"url\": \"<url>\",\n    \"secret\": \"<string>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"err\": \"string\",\n  \"reason\": \"string\",\n  \"message\": \"string\",\n  \"scimType\": \"string\",\n  \"details\": [\n    {\n      \"property\": \"string\",\n      \"message\": [\n        \"string\",\n        \"string\"\n      ]\n    },\n    {\n      \"property\": \"string\",\n      \"message\": [\n        \"string\",\n        \"string\"\n      ]\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0353f5e1-e7cf-40be-b625-4d25f902ea03",
+              "name": "Too Many Requests - rate limit exceeded",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "rest",
+                    "v1",
+                    "turbo",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"prompt\": \"<string>\",\n  \"mode\": \"STILL_IMAGE\",\n  \"files\": [\n    \"<binary>\",\n    \"<binary>\"\n  ],\n  \"callbackWebhook\": {\n    \"url\": \"<url>\",\n    \"secret\": \"<string>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"err\": \"string\",\n  \"reason\": \"string\",\n  \"message\": \"string\",\n  \"scimType\": \"string\",\n  \"details\": [\n    {\n      \"property\": \"string\",\n      \"message\": [\n        \"string\",\n        \"string\"\n      ]\n    },\n    {\n      \"property\": \"string\",\n      \"message\": [\n        \"string\",\n        \"string\"\n      ]\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1ef3507f-6ad0-41e4-869f-ad17a3aa567d",
+              "name": "Internal Server Error - unexpected error during Turbo generation creation",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "rest",
+                    "v1",
+                    "turbo",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"prompt\": \"<string>\",\n  \"mode\": \"STILL_IMAGE\",\n  \"files\": [\n    \"<binary>\",\n    \"<binary>\"\n  ],\n  \"callbackWebhook\": {\n    \"url\": \"<url>\",\n    \"secret\": \"<string>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"err\": \"string\",\n  \"reason\": \"string\",\n  \"message\": \"string\",\n  \"scimType\": \"string\",\n  \"details\": [\n    {\n      \"property\": \"string\",\n      \"message\": [\n        \"string\",\n        \"string\"\n      ]\n    },\n    {\n      \"property\": \"string\",\n      \"message\": [\n        \"string\",\n        \"string\"\n      ]\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "29a43490-5b17-41a4-9a01-fbe242d18367",
+          "name": "Get Turbo video generation",
+          "request": {
+            "name": "Get Turbo video generation",
+            "description": {
+              "content": "Get the status and download URL of a Turbo video generation task by ID",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "rest",
+                "v1",
+                "turbo",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "ec0cc1e6-f8ec-4afc-a386-4ca8e40f5ea9",
+              "name": "Turbo video generation status details",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "rest",
+                    "v1",
+                    "turbo",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": \"failed\",\n  \"turboThreadUrl\": \"string\",\n  \"creditConsumed\": 907.0083169199116,\n  \"downloadUrl\": \"string\",\n  \"expiredAt\": \"6286-14-08T28:47:45V46802438678Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b3ded6a5-3f80-481d-8776-3117467dd087",
+              "name": "Unauthorized - missing or invalid credentials",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "rest",
+                    "v1",
+                    "turbo",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"err\": \"string\",\n  \"reason\": \"string\",\n  \"message\": \"string\",\n  \"scimType\": \"string\",\n  \"details\": [\n    {\n      \"property\": \"string\",\n      \"message\": [\n        \"string\",\n        \"string\"\n      ]\n    },\n    {\n      \"property\": \"string\",\n      \"message\": [\n        \"string\",\n        \"string\"\n      ]\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9b2d4472-17b4-46b1-b6cb-8b936e78c469",
+              "name": "Forbidden - missing required scope, invalid owner type or no Turbo license",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "rest",
+                    "v1",
+                    "turbo",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"err\": \"string\",\n  \"reason\": \"string\",\n  \"message\": \"string\",\n  \"scimType\": \"string\",\n  \"details\": [\n    {\n      \"property\": \"string\",\n      \"message\": [\n        \"string\",\n        \"string\"\n      ]\n    },\n    {\n      \"property\": \"string\",\n      \"message\": [\n        \"string\",\n        \"string\"\n      ]\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3e175261-8eee-4cc1-9892-5c4afafea408",
+              "name": "Not Found - Turbo generation task not found for the user",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "rest",
+                    "v1",
+                    "turbo",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"err\": \"string\",\n  \"reason\": \"string\",\n  \"message\": \"string\",\n  \"scimType\": \"string\",\n  \"details\": [\n    {\n      \"property\": \"string\",\n      \"message\": [\n        \"string\",\n        \"string\"\n      ]\n    },\n    {\n      \"property\": \"string\",\n      \"message\": [\n        \"string\",\n        \"string\"\n      ]\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3aa6740c-9a58-4fed-8710-f649fb649732",
+              "name": "Too Many Requests - rate limit exceeded",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "rest",
+                    "v1",
+                    "turbo",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"err\": \"string\",\n  \"reason\": \"string\",\n  \"message\": \"string\",\n  \"scimType\": \"string\",\n  \"details\": [\n    {\n      \"property\": \"string\",\n      \"message\": [\n        \"string\",\n        \"string\"\n      ]\n    },\n    {\n      \"property\": \"string\",\n      \"message\": [\n        \"string\",\n        \"string\"\n      ]\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2f4e8195-664e-479d-a170-e9fa7019648e",
+              "name": "Internal Server Error - unexpected error while retrieving Turbo generation",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "rest",
+                    "v1",
+                    "turbo",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"err\": \"string\",\n  \"reason\": \"string\",\n  \"message\": \"string\",\n  \"scimType\": \"string\",\n  \"details\": [\n    {\n      \"property\": \"string\",\n      \"message\": [\n        \"string\",\n        \"string\"\n      ]\n    },\n    {\n      \"property\": \"string\",\n      \"message\": [\n        \"string\",\n        \"string\"\n      ]\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "ffbcd1c9-7ed8-46c4-948d-4415cad7b1f8",
+    "name": "Vyond API Documentation Turbo API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "APIs for creating and tracking Turbo video generation tasks.\n\nTurbo lets you generate a video from a text prompt, optionally grounded on reference files (e.g. `.txt`, `.pdf`, `.docx`, `.pptx`). Submit a prompt to start a task, then poll the task by its ID to retrieve the status and, once completed, the download URL of the generated video.\n\n## Webhook events\n\nInstead of polling, you can listen to webhook events to be notified when a Turbo task completes. Webhook events are always emitted for every task, so you can register a webhook subscription (owner type `user`) before the task completes, or supply a one-off `callbackWebhook` in the create request.\n\n| Event                        | Description                                                                                                         |\n| ---------------------------- | ------------------------------------------------------------------------------------------------------------------- |\n| `turbo_generation.succeeded` | The Turbo video generation completed successfully. `data` contains `downloadUrl`, `creditConsumed` and `expiredAt`. |\n| `turbo_generation.failed`    | The Turbo video generation failed (or timed out). An `error.code` is included.                                      |\n\nThe event `data` contains `id` (the task/thread ID), `status` and `turboThreadUrl`. Refer to [Webhook events](#tag/Webhook/Webhook-events) for the event body type definition, signature verification and sample payloads.\n",
+      "type": "text/plain"
+    }
+  }
+}

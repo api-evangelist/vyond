@@ -1,0 +1,1122 @@
+{
+  "item": [
+    {
+      "id": "b2a232a0-1a20-45e4-9cc7-cf1362e68a4e",
+      "name": "Content Generation",
+      "description": {
+        "content": "APIs for content generation\n",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "7c41a57f-0d1e-461a-aebd-09b2bff133b4",
+          "name": "Create content generation",
+          "request": {
+            "name": "Create content generation",
+            "description": {
+              "content": "Create a new task for content generation",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "rest",
+                "v1",
+                "generations",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"text\": \"<string>\",\n  \"method\": \"topic\",\n  \"extractParams\": \"<boolean>\",\n  \"callbackInfo\": {\n    \"type\": \"<string>\",\n    \"webhookUrl\": \"<url>\"\n  },\n  \"layout\": {\n    \"template\": \"<string>\",\n    \"type\": \"<string>\"\n  },\n  \"format\": \"OVERVIEW\",\n  \"tone\": \"INFORMATIVE\",\n  \"characters\": [\n    {\n      \"person\": \"<number>\",\n      \"src\": \"<string>\"\n    },\n    {\n      \"person\": \"<number>\",\n      \"src\": \"<string>\"\n    }\n  ],\n  \"voices\": [\n    {\n      \"voiceId\": \"<string>\",\n      \"style\": \"<string>\",\n      \"speed\": \"<string>\",\n      \"pitch\": \"<string>\"\n    },\n    {\n      \"voiceId\": \"<string>\",\n      \"style\": \"<string>\",\n      \"speed\": \"<string>\",\n      \"pitch\": \"<string>\"\n    }\n  ],\n  \"language\": {\n    \"target\": \"en\",\n    \"accent\": \"United States\"\n  },\n  \"file\": \"<binary>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "75242a57-bc4e-4cae-88fe-d9416126940c",
+              "name": "Object with id = content generation task ID",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "rest",
+                    "v1",
+                    "generations",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"text\": \"<string>\",\n  \"method\": \"topic\",\n  \"extractParams\": \"<boolean>\",\n  \"callbackInfo\": {\n    \"type\": \"<string>\",\n    \"webhookUrl\": \"<url>\"\n  },\n  \"layout\": {\n    \"template\": \"<string>\",\n    \"type\": \"<string>\"\n  },\n  \"format\": \"OVERVIEW\",\n  \"tone\": \"INFORMATIVE\",\n  \"characters\": [\n    {\n      \"person\": \"<number>\",\n      \"src\": \"<string>\"\n    }\n  ],\n  \"voices\": [\n    {\n      \"voiceId\": \"<string>\",\n      \"style\": \"<string>\",\n      \"speed\": \"<string>\",\n      \"pitch\": \"<string>\"\n    },\n    {\n      \"voiceId\": \"<string>\",\n      \"style\": \"<string>\",\n      \"speed\": \"<string>\",\n      \"pitch\": \"<string>\"\n    }\n  ],\n  \"language\": {\n    \"target\": \"en\",\n    \"accent\": \"United States\"\n  },\n  \"file\": \"<binary>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"cedecc02-9679-fa52-73ee-756dc4d1283b\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "04f00e7a-0225-4591-a6a5-560e2fd0823d",
+              "name": "Unauthorized - missing or invalid credentials",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "rest",
+                    "v1",
+                    "generations",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"text\": \"<string>\",\n  \"method\": \"topic\",\n  \"extractParams\": \"<boolean>\",\n  \"callbackInfo\": {\n    \"type\": \"<string>\",\n    \"webhookUrl\": \"<url>\"\n  },\n  \"layout\": {\n    \"template\": \"<string>\",\n    \"type\": \"<string>\"\n  },\n  \"format\": \"OVERVIEW\",\n  \"tone\": \"INFORMATIVE\",\n  \"characters\": [\n    {\n      \"person\": \"<number>\",\n      \"src\": \"<string>\"\n    }\n  ],\n  \"voices\": [\n    {\n      \"voiceId\": \"<string>\",\n      \"style\": \"<string>\",\n      \"speed\": \"<string>\",\n      \"pitch\": \"<string>\"\n    },\n    {\n      \"voiceId\": \"<string>\",\n      \"style\": \"<string>\",\n      \"speed\": \"<string>\",\n      \"pitch\": \"<string>\"\n    }\n  ],\n  \"language\": {\n    \"target\": \"en\",\n    \"accent\": \"United States\"\n  },\n  \"file\": \"<binary>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"err\": \"string\",\n  \"reason\": \"string\",\n  \"message\": \"string\",\n  \"scimType\": \"string\",\n  \"details\": [\n    {\n      \"property\": \"string\",\n      \"message\": [\n        \"string\",\n        \"string\"\n      ]\n    },\n    {\n      \"property\": \"string\",\n      \"message\": [\n        \"string\",\n        \"string\"\n      ]\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8d926172-fbe3-49e3-85f2-07e83668b035",
+              "name": "Forbidden - missing required VYOND_GO scope or invalid owner type",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "rest",
+                    "v1",
+                    "generations",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"text\": \"<string>\",\n  \"method\": \"topic\",\n  \"extractParams\": \"<boolean>\",\n  \"callbackInfo\": {\n    \"type\": \"<string>\",\n    \"webhookUrl\": \"<url>\"\n  },\n  \"layout\": {\n    \"template\": \"<string>\",\n    \"type\": \"<string>\"\n  },\n  \"format\": \"OVERVIEW\",\n  \"tone\": \"INFORMATIVE\",\n  \"characters\": [\n    {\n      \"person\": \"<number>\",\n      \"src\": \"<string>\"\n    }\n  ],\n  \"voices\": [\n    {\n      \"voiceId\": \"<string>\",\n      \"style\": \"<string>\",\n      \"speed\": \"<string>\",\n      \"pitch\": \"<string>\"\n    },\n    {\n      \"voiceId\": \"<string>\",\n      \"style\": \"<string>\",\n      \"speed\": \"<string>\",\n      \"pitch\": \"<string>\"\n    }\n  ],\n  \"language\": {\n    \"target\": \"en\",\n    \"accent\": \"United States\"\n  },\n  \"file\": \"<binary>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"err\": \"string\",\n  \"reason\": \"string\",\n  \"message\": \"string\",\n  \"scimType\": \"string\",\n  \"details\": [\n    {\n      \"property\": \"string\",\n      \"message\": [\n        \"string\",\n        \"string\"\n      ]\n    },\n    {\n      \"property\": \"string\",\n      \"message\": [\n        \"string\",\n        \"string\"\n      ]\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f617f1de-5df0-46e0-91a8-575854bdb19e",
+              "name": "Too Many Requests - rate limit exceeded",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "rest",
+                    "v1",
+                    "generations",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"text\": \"<string>\",\n  \"method\": \"topic\",\n  \"extractParams\": \"<boolean>\",\n  \"callbackInfo\": {\n    \"type\": \"<string>\",\n    \"webhookUrl\": \"<url>\"\n  },\n  \"layout\": {\n    \"template\": \"<string>\",\n    \"type\": \"<string>\"\n  },\n  \"format\": \"OVERVIEW\",\n  \"tone\": \"INFORMATIVE\",\n  \"characters\": [\n    {\n      \"person\": \"<number>\",\n      \"src\": \"<string>\"\n    }\n  ],\n  \"voices\": [\n    {\n      \"voiceId\": \"<string>\",\n      \"style\": \"<string>\",\n      \"speed\": \"<string>\",\n      \"pitch\": \"<string>\"\n    },\n    {\n      \"voiceId\": \"<string>\",\n      \"style\": \"<string>\",\n      \"speed\": \"<string>\",\n      \"pitch\": \"<string>\"\n    }\n  ],\n  \"language\": {\n    \"target\": \"en\",\n    \"accent\": \"United States\"\n  },\n  \"file\": \"<binary>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"err\": \"string\",\n  \"reason\": \"string\",\n  \"message\": \"string\",\n  \"scimType\": \"string\",\n  \"details\": [\n    {\n      \"property\": \"string\",\n      \"message\": [\n        \"string\",\n        \"string\"\n      ]\n    },\n    {\n      \"property\": \"string\",\n      \"message\": [\n        \"string\",\n        \"string\"\n      ]\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7511d6b6-a27e-4b93-9c32-db9fe8ddd289",
+              "name": "Internal Server Error - unexpected error during content generation creation",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "rest",
+                    "v1",
+                    "generations",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"text\": \"<string>\",\n  \"method\": \"topic\",\n  \"extractParams\": \"<boolean>\",\n  \"callbackInfo\": {\n    \"type\": \"<string>\",\n    \"webhookUrl\": \"<url>\"\n  },\n  \"layout\": {\n    \"template\": \"<string>\",\n    \"type\": \"<string>\"\n  },\n  \"format\": \"OVERVIEW\",\n  \"tone\": \"INFORMATIVE\",\n  \"characters\": [\n    {\n      \"person\": \"<number>\",\n      \"src\": \"<string>\"\n    }\n  ],\n  \"voices\": [\n    {\n      \"voiceId\": \"<string>\",\n      \"style\": \"<string>\",\n      \"speed\": \"<string>\",\n      \"pitch\": \"<string>\"\n    },\n    {\n      \"voiceId\": \"<string>\",\n      \"style\": \"<string>\",\n      \"speed\": \"<string>\",\n      \"pitch\": \"<string>\"\n    }\n  ],\n  \"language\": {\n    \"target\": \"en\",\n    \"accent\": \"United States\"\n  },\n  \"file\": \"<binary>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"err\": \"string\",\n  \"reason\": \"string\",\n  \"message\": \"string\",\n  \"scimType\": \"string\",\n  \"details\": [\n    {\n      \"property\": \"string\",\n      \"message\": [\n        \"string\",\n        \"string\"\n      ]\n    },\n    {\n      \"property\": \"string\",\n      \"message\": [\n        \"string\",\n        \"string\"\n      ]\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "1e1a0766-c306-42c8-b860-c89310c8655e",
+          "name": "Create content generation",
+          "request": {
+            "name": "Create content generation",
+            "description": {
+              "content": "Create a new task for content generation",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "rest",
+                "v2",
+                "generations",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": \"<string>\",\n  \"callbackWebhook\": {\n    \"url\": \"<url>\",\n    \"secret\": \"<string>\"\n  },\n  \"vyondGoParams\": {\n    \"text\": \"<string>\",\n    \"method\": \"topic\",\n    \"extractParams\": \"<boolean>\",\n    \"callbackInfo\": {\n      \"type\": \"<string>\",\n      \"webhookUrl\": \"<url>\"\n    },\n    \"layout\": {\n      \"template\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    \"format\": \"OVERVIEW\",\n    \"tone\": \"INFORMATIVE\",\n    \"characters\": [\n      {\n        \"person\": \"<number>\",\n        \"src\": \"<string>\"\n      },\n      {\n        \"person\": \"<number>\",\n        \"src\": \"<string>\"\n      }\n    ],\n    \"voices\": [\n      {\n        \"voiceId\": \"<string>\",\n        \"style\": \"<string>\",\n        \"speed\": \"<string>\",\n        \"pitch\": \"<string>\"\n      },\n      {\n        \"voiceId\": \"<string>\",\n        \"style\": \"<string>\",\n        \"speed\": \"<string>\",\n        \"pitch\": \"<string>\"\n      }\n    ],\n    \"language\": {\n      \"target\": \"en\",\n      \"accent\": \"United States\"\n    },\n    \"file\": \"<binary>\"\n  },\n  \"aiAvatarParams\": {\n    \"script\": \"<string>\",\n    \"provider\": \"<string>\",\n    \"avatarId\": \"<string>\",\n    \"background\": \"default\",\n    \"customBackground\": \"<integer>\",\n    \"language\": \"en-US\",\n    \"voice\": {\n      \"voiceId\": \"<string>\",\n      \"engine\": \"<string>\",\n      \"pitch\": \"default\",\n      \"rate\": \"default\",\n      \"style\": \"<string>\"\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "31143f4b-614a-4e8c-a563-6b255c38b22e",
+              "name": "Object with id = content generation task ID",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "rest",
+                    "v2",
+                    "generations",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"type\": \"<string>\",\n  \"callbackWebhook\": {\n    \"url\": \"<url>\",\n    \"secret\": \"<string>\"\n  },\n  \"vyondGoParams\": {\n    \"text\": \"<string>\",\n    \"method\": \"topic\",\n    \"extractParams\": \"<boolean>\",\n    \"callbackInfo\": {\n      \"type\": \"<string>\",\n      \"webhookUrl\": \"<url>\"\n    },\n    \"layout\": {\n      \"template\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    \"format\": \"OVERVIEW\",\n    \"tone\": \"INFORMATIVE\",\n    \"characters\": [\n      {\n        \"person\": \"<number>\",\n        \"src\": \"<string>\"\n      }\n    ],\n    \"voices\": [\n      {\n        \"voiceId\": \"<string>\",\n        \"style\": \"<string>\",\n        \"speed\": \"<string>\",\n        \"pitch\": \"<string>\"\n      },\n      {\n        \"voiceId\": \"<string>\",\n        \"style\": \"<string>\",\n        \"speed\": \"<string>\",\n        \"pitch\": \"<string>\"\n      }\n    ],\n    \"language\": {\n      \"target\": \"en\",\n      \"accent\": \"United States\"\n    },\n    \"file\": \"<binary>\"\n  },\n  \"aiAvatarParams\": {\n    \"script\": \"<string>\",\n    \"provider\": \"<string>\",\n    \"avatarId\": \"<string>\",\n    \"background\": \"default\",\n    \"customBackground\": \"<integer>\",\n    \"language\": \"en-US\",\n    \"voice\": {\n      \"voiceId\": \"<string>\",\n      \"engine\": \"<string>\",\n      \"pitch\": \"default\",\n      \"rate\": \"default\",\n      \"style\": \"<string>\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"cedecc02-9679-fa52-73ee-756dc4d1283b\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "22030184-402a-430c-b8a8-fa282d7422a0",
+              "name": "Bad Request - invalid or unsupported generation type or parameters. Reason or message may be present",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "rest",
+                    "v2",
+                    "generations",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"type\": \"<string>\",\n  \"callbackWebhook\": {\n    \"url\": \"<url>\",\n    \"secret\": \"<string>\"\n  },\n  \"vyondGoParams\": {\n    \"text\": \"<string>\",\n    \"method\": \"topic\",\n    \"extractParams\": \"<boolean>\",\n    \"callbackInfo\": {\n      \"type\": \"<string>\",\n      \"webhookUrl\": \"<url>\"\n    },\n    \"layout\": {\n      \"template\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    \"format\": \"OVERVIEW\",\n    \"tone\": \"INFORMATIVE\",\n    \"characters\": [\n      {\n        \"person\": \"<number>\",\n        \"src\": \"<string>\"\n      }\n    ],\n    \"voices\": [\n      {\n        \"voiceId\": \"<string>\",\n        \"style\": \"<string>\",\n        \"speed\": \"<string>\",\n        \"pitch\": \"<string>\"\n      },\n      {\n        \"voiceId\": \"<string>\",\n        \"style\": \"<string>\",\n        \"speed\": \"<string>\",\n        \"pitch\": \"<string>\"\n      }\n    ],\n    \"language\": {\n      \"target\": \"en\",\n      \"accent\": \"United States\"\n    },\n    \"file\": \"<binary>\"\n  },\n  \"aiAvatarParams\": {\n    \"script\": \"<string>\",\n    \"provider\": \"<string>\",\n    \"avatarId\": \"<string>\",\n    \"background\": \"default\",\n    \"customBackground\": \"<integer>\",\n    \"language\": \"en-US\",\n    \"voice\": {\n      \"voiceId\": \"<string>\",\n      \"engine\": \"<string>\",\n      \"pitch\": \"default\",\n      \"rate\": \"default\",\n      \"style\": \"<string>\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"err\": \"string\",\n  \"reason\": \"string\",\n  \"message\": \"string\",\n  \"scimType\": \"string\",\n  \"details\": [\n    {\n      \"property\": \"string\",\n      \"message\": [\n        \"string\",\n        \"string\"\n      ]\n    },\n    {\n      \"property\": \"string\",\n      \"message\": [\n        \"string\",\n        \"string\"\n      ]\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c417f517-13e1-46ba-a5b8-730e25eae3d1",
+              "name": "Unauthorized - missing or invalid credentials",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "rest",
+                    "v2",
+                    "generations",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"type\": \"<string>\",\n  \"callbackWebhook\": {\n    \"url\": \"<url>\",\n    \"secret\": \"<string>\"\n  },\n  \"vyondGoParams\": {\n    \"text\": \"<string>\",\n    \"method\": \"topic\",\n    \"extractParams\": \"<boolean>\",\n    \"callbackInfo\": {\n      \"type\": \"<string>\",\n      \"webhookUrl\": \"<url>\"\n    },\n    \"layout\": {\n      \"template\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    \"format\": \"OVERVIEW\",\n    \"tone\": \"INFORMATIVE\",\n    \"characters\": [\n      {\n        \"person\": \"<number>\",\n        \"src\": \"<string>\"\n      }\n    ],\n    \"voices\": [\n      {\n        \"voiceId\": \"<string>\",\n        \"style\": \"<string>\",\n        \"speed\": \"<string>\",\n        \"pitch\": \"<string>\"\n      },\n      {\n        \"voiceId\": \"<string>\",\n        \"style\": \"<string>\",\n        \"speed\": \"<string>\",\n        \"pitch\": \"<string>\"\n      }\n    ],\n    \"language\": {\n      \"target\": \"en\",\n      \"accent\": \"United States\"\n    },\n    \"file\": \"<binary>\"\n  },\n  \"aiAvatarParams\": {\n    \"script\": \"<string>\",\n    \"provider\": \"<string>\",\n    \"avatarId\": \"<string>\",\n    \"background\": \"default\",\n    \"customBackground\": \"<integer>\",\n    \"language\": \"en-US\",\n    \"voice\": {\n      \"voiceId\": \"<string>\",\n      \"engine\": \"<string>\",\n      \"pitch\": \"default\",\n      \"rate\": \"default\",\n      \"style\": \"<string>\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"err\": \"string\",\n  \"reason\": \"string\",\n  \"message\": \"string\",\n  \"scimType\": \"string\",\n  \"details\": [\n    {\n      \"property\": \"string\",\n      \"message\": [\n        \"string\",\n        \"string\"\n      ]\n    },\n    {\n      \"property\": \"string\",\n      \"message\": [\n        \"string\",\n        \"string\"\n      ]\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "72dff979-8880-4c78-bc82-6f20efd378c6",
+              "name": "Forbidden - missing required scope or invalid owner type. Reason or message may be present",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "rest",
+                    "v2",
+                    "generations",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"type\": \"<string>\",\n  \"callbackWebhook\": {\n    \"url\": \"<url>\",\n    \"secret\": \"<string>\"\n  },\n  \"vyondGoParams\": {\n    \"text\": \"<string>\",\n    \"method\": \"topic\",\n    \"extractParams\": \"<boolean>\",\n    \"callbackInfo\": {\n      \"type\": \"<string>\",\n      \"webhookUrl\": \"<url>\"\n    },\n    \"layout\": {\n      \"template\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    \"format\": \"OVERVIEW\",\n    \"tone\": \"INFORMATIVE\",\n    \"characters\": [\n      {\n        \"person\": \"<number>\",\n        \"src\": \"<string>\"\n      }\n    ],\n    \"voices\": [\n      {\n        \"voiceId\": \"<string>\",\n        \"style\": \"<string>\",\n        \"speed\": \"<string>\",\n        \"pitch\": \"<string>\"\n      },\n      {\n        \"voiceId\": \"<string>\",\n        \"style\": \"<string>\",\n        \"speed\": \"<string>\",\n        \"pitch\": \"<string>\"\n      }\n    ],\n    \"language\": {\n      \"target\": \"en\",\n      \"accent\": \"United States\"\n    },\n    \"file\": \"<binary>\"\n  },\n  \"aiAvatarParams\": {\n    \"script\": \"<string>\",\n    \"provider\": \"<string>\",\n    \"avatarId\": \"<string>\",\n    \"background\": \"default\",\n    \"customBackground\": \"<integer>\",\n    \"language\": \"en-US\",\n    \"voice\": {\n      \"voiceId\": \"<string>\",\n      \"engine\": \"<string>\",\n      \"pitch\": \"default\",\n      \"rate\": \"default\",\n      \"style\": \"<string>\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"err\": \"string\",\n  \"reason\": \"string\",\n  \"message\": \"string\",\n  \"scimType\": \"string\",\n  \"details\": [\n    {\n      \"property\": \"string\",\n      \"message\": [\n        \"string\",\n        \"string\"\n      ]\n    },\n    {\n      \"property\": \"string\",\n      \"message\": [\n        \"string\",\n        \"string\"\n      ]\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9d93640a-9686-4571-b576-ef34b52d7de7",
+              "name": "Too Many Requests - rate limit exceeded",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "rest",
+                    "v2",
+                    "generations",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"type\": \"<string>\",\n  \"callbackWebhook\": {\n    \"url\": \"<url>\",\n    \"secret\": \"<string>\"\n  },\n  \"vyondGoParams\": {\n    \"text\": \"<string>\",\n    \"method\": \"topic\",\n    \"extractParams\": \"<boolean>\",\n    \"callbackInfo\": {\n      \"type\": \"<string>\",\n      \"webhookUrl\": \"<url>\"\n    },\n    \"layout\": {\n      \"template\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    \"format\": \"OVERVIEW\",\n    \"tone\": \"INFORMATIVE\",\n    \"characters\": [\n      {\n        \"person\": \"<number>\",\n        \"src\": \"<string>\"\n      }\n    ],\n    \"voices\": [\n      {\n        \"voiceId\": \"<string>\",\n        \"style\": \"<string>\",\n        \"speed\": \"<string>\",\n        \"pitch\": \"<string>\"\n      },\n      {\n        \"voiceId\": \"<string>\",\n        \"style\": \"<string>\",\n        \"speed\": \"<string>\",\n        \"pitch\": \"<string>\"\n      }\n    ],\n    \"language\": {\n      \"target\": \"en\",\n      \"accent\": \"United States\"\n    },\n    \"file\": \"<binary>\"\n  },\n  \"aiAvatarParams\": {\n    \"script\": \"<string>\",\n    \"provider\": \"<string>\",\n    \"avatarId\": \"<string>\",\n    \"background\": \"default\",\n    \"customBackground\": \"<integer>\",\n    \"language\": \"en-US\",\n    \"voice\": {\n      \"voiceId\": \"<string>\",\n      \"engine\": \"<string>\",\n      \"pitch\": \"default\",\n      \"rate\": \"default\",\n      \"style\": \"<string>\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"err\": \"string\",\n  \"reason\": \"string\",\n  \"message\": \"string\",\n  \"scimType\": \"string\",\n  \"details\": [\n    {\n      \"property\": \"string\",\n      \"message\": [\n        \"string\",\n        \"string\"\n      ]\n    },\n    {\n      \"property\": \"string\",\n      \"message\": [\n        \"string\",\n        \"string\"\n      ]\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "878439c3-dd69-43cd-af40-7f39b8fe0352",
+              "name": "Internal Server Error - unexpected error during content generation creation",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "rest",
+                    "v2",
+                    "generations",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"type\": \"<string>\",\n  \"callbackWebhook\": {\n    \"url\": \"<url>\",\n    \"secret\": \"<string>\"\n  },\n  \"vyondGoParams\": {\n    \"text\": \"<string>\",\n    \"method\": \"topic\",\n    \"extractParams\": \"<boolean>\",\n    \"callbackInfo\": {\n      \"type\": \"<string>\",\n      \"webhookUrl\": \"<url>\"\n    },\n    \"layout\": {\n      \"template\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    \"format\": \"OVERVIEW\",\n    \"tone\": \"INFORMATIVE\",\n    \"characters\": [\n      {\n        \"person\": \"<number>\",\n        \"src\": \"<string>\"\n      }\n    ],\n    \"voices\": [\n      {\n        \"voiceId\": \"<string>\",\n        \"style\": \"<string>\",\n        \"speed\": \"<string>\",\n        \"pitch\": \"<string>\"\n      },\n      {\n        \"voiceId\": \"<string>\",\n        \"style\": \"<string>\",\n        \"speed\": \"<string>\",\n        \"pitch\": \"<string>\"\n      }\n    ],\n    \"language\": {\n      \"target\": \"en\",\n      \"accent\": \"United States\"\n    },\n    \"file\": \"<binary>\"\n  },\n  \"aiAvatarParams\": {\n    \"script\": \"<string>\",\n    \"provider\": \"<string>\",\n    \"avatarId\": \"<string>\",\n    \"background\": \"default\",\n    \"customBackground\": \"<integer>\",\n    \"language\": \"en-US\",\n    \"voice\": {\n      \"voiceId\": \"<string>\",\n      \"engine\": \"<string>\",\n      \"pitch\": \"default\",\n      \"rate\": \"default\",\n      \"style\": \"<string>\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"err\": \"string\",\n  \"reason\": \"string\",\n  \"message\": \"string\",\n  \"scimType\": \"string\",\n  \"details\": [\n    {\n      \"property\": \"string\",\n      \"message\": [\n        \"string\",\n        \"string\"\n      ]\n    },\n    {\n      \"property\": \"string\",\n      \"message\": [\n        \"string\",\n        \"string\"\n      ]\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "e738724e-299d-4150-9982-1612be6dfd08",
+          "name": "Get content generation",
+          "request": {
+            "name": "Get content generation",
+            "description": {
+              "content": "Get content generation details by ID",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "rest",
+                "v2",
+                "generations",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "eab0bf80-3da4-48e6-a4a8-7016d7004a9c",
+              "name": "Content generation details",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "rest",
+                    "v2",
+                    "generations",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"vyondGo\",\n  \"id\": \"19ae8858-1efc-b445-39f2-7067b5a2f4d6\",\n  \"videoId\": \"238a43c0-63bf-57f8-5673-99d1975fe307\",\n  \"status\": \"success\",\n  \"name\": \"string\",\n  \"url\": \"string\",\n  \"downloadUrl\": \"string\",\n  \"expiredAt\": \"8482-07-39T11:44:10%758796062\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ae55d631-6131-425a-97b5-48270230a38f",
+              "name": "Unauthorized - missing or invalid credentials",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "rest",
+                    "v2",
+                    "generations",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"err\": \"string\",\n  \"reason\": \"string\",\n  \"message\": \"string\",\n  \"scimType\": \"string\",\n  \"details\": [\n    {\n      \"property\": \"string\",\n      \"message\": [\n        \"string\",\n        \"string\"\n      ]\n    },\n    {\n      \"property\": \"string\",\n      \"message\": [\n        \"string\",\n        \"string\"\n      ]\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "48e73df7-adf5-46e8-a028-8286e51dc621",
+              "name": "Forbidden - invalid owner type",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "rest",
+                    "v2",
+                    "generations",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"err\": \"string\",\n  \"reason\": \"string\",\n  \"message\": \"string\",\n  \"scimType\": \"string\",\n  \"details\": [\n    {\n      \"property\": \"string\",\n      \"message\": [\n        \"string\",\n        \"string\"\n      ]\n    },\n    {\n      \"property\": \"string\",\n      \"message\": [\n        \"string\",\n        \"string\"\n      ]\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9d7c7d03-58e5-4e20-88c7-202939aedb54",
+              "name": "Not Found - content generation task does not exist",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "rest",
+                    "v2",
+                    "generations",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"err\": \"string\",\n  \"reason\": \"string\",\n  \"message\": \"string\",\n  \"scimType\": \"string\",\n  \"details\": [\n    {\n      \"property\": \"string\",\n      \"message\": [\n        \"string\",\n        \"string\"\n      ]\n    },\n    {\n      \"property\": \"string\",\n      \"message\": [\n        \"string\",\n        \"string\"\n      ]\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f8a8fbb1-ee29-4495-8875-0a6a9763a715",
+              "name": "Too Many Requests - rate limit exceeded",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "rest",
+                    "v2",
+                    "generations",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"err\": \"string\",\n  \"reason\": \"string\",\n  \"message\": \"string\",\n  \"scimType\": \"string\",\n  \"details\": [\n    {\n      \"property\": \"string\",\n      \"message\": [\n        \"string\",\n        \"string\"\n      ]\n    },\n    {\n      \"property\": \"string\",\n      \"message\": [\n        \"string\",\n        \"string\"\n      ]\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ec274bb6-f768-44bb-a29e-fe85af2770b4",
+              "name": "Internal Server Error - unexpected error while retrieving content generation",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "rest",
+                    "v2",
+                    "generations",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"err\": \"string\",\n  \"reason\": \"string\",\n  \"message\": \"string\",\n  \"scimType\": \"string\",\n  \"details\": [\n    {\n      \"property\": \"string\",\n      \"message\": [\n        \"string\",\n        \"string\"\n      ]\n    },\n    {\n      \"property\": \"string\",\n      \"message\": [\n        \"string\",\n        \"string\"\n      ]\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "5695c60d-1f61-496c-a8da-08edda50f7a3",
+    "name": "Vyond API Documentation Content Generation API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "APIs for content generation\n",
+      "type": "text/plain"
+    }
+  }
+}
