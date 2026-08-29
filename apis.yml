@@ -10,6 +10,18 @@ description: 'Vyond is a business video creation platform — formerly GoAnimate
   SCIM 2.0 API (/scim/v2/) for enterprise user provisioning against identity providers
   such as Okta. Access is bearer-token based — API tokens for SCIM, OAuth 2.0 access
   tokens for REST — and is scoped per feature (VYOND_GO, VIDEO_EXPORT).'
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: true
+  label: Hosted service · you call their endpoint
+  confidence: high
+  source:
+  - openapi
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 image: https://www.vyond.com/wp-content/uploads/2025/05/vyond-social-promo-card-1200x630-1.webp
 url: https://raw.githubusercontent.com/api-evangelist/vyond/refs/heads/main/apis.yml
 x-type: company
