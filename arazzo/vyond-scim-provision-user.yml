@@ -5,6 +5,17 @@ info:
   summary: >-
     Discover the SCIM schemas, search for an existing user by filter, create the
     user, then deactivate them with a PATCH.
+  x-realizes-capability-ids:
+  - BC-4230.50
+  x-capability-derivation:
+    method: 'deterministic join: sourceDescriptions -> per-tag OpenAPI -> tag/capability edge. No classification at this step.'
+    min_confidence: 0.7
+    sources:
+    - capability_id: BC-4230.50
+      capability_name: Tenant Identity Federation
+      spec: vyond-scim-api-openapi.yml
+      confidence: 0.7
+    model: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities, CC BY 4.0
 sourceDescriptions:
 - name: scimApi
   url: ../openapi/vyond-scim-api-openapi.yml

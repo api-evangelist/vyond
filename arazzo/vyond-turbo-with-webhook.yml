@@ -5,6 +5,17 @@ info:
   summary: >-
     Register a webhook subscription for Turbo events, submit a text prompt to
     Turbo, and poll the task as a fallback until it reaches a terminal status.
+  x-realizes-capability-ids:
+  - BC-4270.80
+  x-capability-derivation:
+    method: 'deterministic join: sourceDescriptions -> per-tag OpenAPI -> tag/capability edge. No classification at this step.'
+    min_confidence: 0.7
+    sources:
+    - capability_id: BC-4270.80
+      capability_name: Webhook & Event Subscription Management
+      spec: vyond-webhook-api-openapi.yml
+      confidence: 0.7
+    model: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities, CC BY 4.0
 sourceDescriptions:
 - name: turboApi
   url: ../openapi/vyond-turbo-api-openapi.yml
