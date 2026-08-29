@@ -432,6 +432,9 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: CapabilityMap
+  url: capabilities/vyond-capability-edges.yml
+  name: Vyond Business Capability Map
 - type: AgenticAccess
   url: agentic-access/vyond-agentic-access.yml
 - type: DomainSecurity

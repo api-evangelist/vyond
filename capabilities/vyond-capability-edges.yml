@@ -1,0 +1,37 @@
+slug: vyond
+provider: Vyond
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Media, Entertainment & Telecom Content
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 2
+edges:
+- tag: SCIM
+  spec_file: vyond-scim-api-openapi.yml
+  capability_id: BC-4230.50
+  capability_id_l1: BC-4230
+  capability_name: Tenant Identity Federation
+  confidence: 0.7
+  evidence: GET /scim/v2/Users "Get users"; POST /scim/v2/Users "Create user"; schemas ScimEnterpriseUser,
+    ScimUserList
+  reason: Standard SCIM 2.0 user provisioning endpoints let enterprise customers federate their identity
+    provider and manage user accounts in the tenant, which the frame's Tenant Identity Federation explicitly
+    names ('lifecycle of tenant user accounts via single sign-on and SCIM').
+- tag: Webhook
+  spec_file: vyond-webhook-api-openapi.yml
+  capability_id: BC-4270.80
+  capability_id_l1: BC-4270
+  capability_name: Webhook & Event Subscription Management
+  confidence: 0.7
+  evidence: POST /rest/v1/webhooks/ WebhookController.createWebhook Create webhook; schemas WebhookCreateReqBody,
+    WebhookWithSecret
+  reason: CRUD lifecycle over outbound webhook subscriptions exposed to API consumers, which is exactly
+    the Webhook & Event Subscription Management sub-capability of the developer platform. Otherwise pure
+    integration plumbing, so confidence is moderate.
