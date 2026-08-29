@@ -6,8 +6,11 @@ info:
     Register a webhook subscription for Turbo events, submit a text prompt to
     Turbo, and poll the task as a fallback until it reaches a terminal status.
 sourceDescriptions:
-- name: vyond
-  url: ../openapi/vyond-openapi-original.json
+- name: turboApi
+  url: ../openapi/vyond-turbo-api-openapi.yml
+  type: openapi
+- name: webhookApi
+  url: ../openapi/vyond-webhook-api-openapi.yml
   type: openapi
 workflows:
 - workflowId: turbo-generate-with-webhook

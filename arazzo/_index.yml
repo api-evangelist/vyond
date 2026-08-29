@@ -1,7 +1,7 @@
-generated: '2026-08-05'
-method: generated
-source: openapi/vyond-openapi-original.json
-note: >-
+x-generated: '2026-08-05'
+x-method: generated
+x-source: openapi/vyond-openapi-original.json
+x-note: >-
   Native Arazzo 1.0.1 workflows stitching Vyond's own operations. Every
   operationId used was verified to exist verbatim in the published OpenAPI at
   https://api.vyond.com/doc/openapi.json. No example credentials or test values are

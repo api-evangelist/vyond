@@ -6,8 +6,8 @@ info:
     Discover the SCIM schemas, search for an existing user by filter, create the
     user, then deactivate them with a PATCH.
 sourceDescriptions:
-- name: vyond
-  url: ../openapi/vyond-openapi-original.json
+- name: scimApi
+  url: ../openapi/vyond-scim-api-openapi.yml
   type: openapi
 workflows:
 - workflowId: scim-provision-user

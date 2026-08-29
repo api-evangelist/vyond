@@ -7,8 +7,17 @@ info:
     generation, poll the task to completion, export the resulting video, then
     retrieve the expiring download URL.
 sourceDescriptions:
-- name: vyond
-  url: ../openapi/vyond-openapi-original.json
+- name: contentGenerationApi
+  url: ../openapi/vyond-content-generation-api-openapi.yml
+  type: openapi
+- name: parameterApi
+  url: ../openapi/vyond-parameter-api-openapi.yml
+  type: openapi
+- name: videoApi
+  url: ../openapi/vyond-video-api-openapi.yml
+  type: openapi
+- name: videoExportApi
+  url: ../openapi/vyond-video-export-api-openapi.yml
   type: openapi
 workflows:
 - workflowId: generate-and-export-video
