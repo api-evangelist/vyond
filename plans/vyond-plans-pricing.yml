@@ -10,6 +10,11 @@ provenance:
   grounding: every price_text was found verbatim in the fetched page text
 audience: business-product
 pricing_basis: tiered-subscription
+delivery:
+  delivery: managed
+  method: page
+  read: '2026-09-20'
+  managed_tier: Starter
 published: true
 note: Annual prices shown by default (Starter $699 billed annually, Professional $1199, Enterprise $1649,
   Agency $1999); monthly-only prices $99/$199 also listed. Enterprise/Agency not available monthly; multi-seat
