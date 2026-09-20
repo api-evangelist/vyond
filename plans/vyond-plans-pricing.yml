@@ -1,0 +1,56 @@
+# Pricing transcribed from the provider's own page — see provenance. Numbers are quoted, not derived.
+generated: '2026-09-20'
+method: searched
+source: https://www.vyond.com/plans/
+sources:
+- https://www.vyond.com/plans/
+provenance:
+  tool: planning/api-economics/harvest_pricing.py
+  run: 20260920T120546
+  grounding: every price_text was found verbatim in the fetched page text
+audience: business-product
+pricing_basis: tiered-subscription
+published: true
+note: Annual prices shown by default (Starter $699 billed annually, Professional $1199, Enterprise $1649,
+  Agency $1999); monthly-only prices $99/$199 also listed. Enterprise/Agency not available monthly; multi-seat
+  pricing via Contact Us. Credit consumption table per AI feature included.
+plan_count: 4
+currency: USD
+plans:
+- name: Starter
+  price_text: US $58 /mo
+  price: 58
+  currency: USD
+  period: month
+  unit: single user plan
+  included_quota: 10,000 credits per user, per month; 100 monthly video downloads; max video duration
+    25 min
+- name: Professional
+  price_text: US $100 /mo
+  price: 100
+  currency: USD
+  period: month
+  unit: per user
+  included_quota: 20,000 credits per user, per month; 200 monthly video downloads; max video duration
+    40 min
+- name: Enterprise
+  price_text: US $137 /mo
+  price: 137
+  currency: USD
+  period: month
+  unit: per user
+  included_quota: Virtually unlimited credits; max video duration 90 min
+- name: Agency
+  price_text: US $167 /mo
+  price: 167
+  currency: USD
+  period: month
+  unit: per user
+  included_quota: 400,000 credits per user, per month; max video duration 90 min
+rate_limit_statements:
+- 10,000 credits per user, per month
+- 20,000 credits per user, per month
+- 400,000 credits per user, per month
+- Monthly Video Downloads Maximum video and GIF downloads per user, per month 100 200 Virtually Unlimited
+  Virtually Unlimited
+- Max. Video Duration Maximum length (minutes) per video 25 40 90 90
