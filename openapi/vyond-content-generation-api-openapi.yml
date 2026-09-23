@@ -2,14 +2,10 @@ openapi: 3.2.0
 info:
   title: Vyond API Documentation Content Generation API
   version: 1.1.0
-  description: 'APIs for content generation
-
-    '
+  description: APIs for content generation
 tags:
 - name: Content Generation
-  description: 'APIs for content generation
-
-    '
+  description: APIs for content generation
 paths:
   /rest/v1/generations/:
     post:
@@ -81,8 +77,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiErrorResponse'
-          description: Bad Request - invalid or unsupported generation type or parameters. Reason or message
-            may be present
+          description: Bad Request - invalid or unsupported generation type or parameters. Reason or message may be present
         '401':
           description: Unauthorized - missing or invalid credentials
           content:
@@ -94,8 +89,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiErrorResponse'
-          description: Forbidden - missing required scope or invalid owner type. Reason or message may
-            be present
+          description: Forbidden - missing required scope or invalid owner type. Reason or message may be present
         '429':
           description: Too Many Requests - rate limit exceeded
           content:
@@ -169,6 +163,202 @@ paths:
       description: Get content generation details by ID
 components:
   schemas:
+    ValidationDetail:
+      properties:
+        property:
+          type: string
+          description: The property that failed validation
+        message:
+          items:
+            type: string
+          type: array
+          description: Validation error messages for the property
+      type: object
+      required:
+      - property
+      - message
+    LanguageSetting:
+      properties:
+        target:
+          type: string
+          description: Target language of the generated video.
+        accent:
+          type: string
+          description: Accent of the target language.
+      type: object
+      required:
+      - target
+      - accent
+      description: Video language setting.
+      default:
+        target: en
+        accent: United States
+    CallbackWebhook:
+      properties:
+        url:
+          format: url
+          type: string
+          description: Webhook URL. Must be in https protocol.
+        secret:
+          pattern: ^[0-9A-Za-z]{64}$
+          type: string
+          minLength: 64
+          maxLength: 64
+          description: Webhook secret for [signing the webhook event request by Vyond](#tag/Webhook/Verifying-Vyond-Signatures). If not provided, there is no signature in request. The secret should be in length 64 and contains only digits and English alphabets.
+      type: object
+      required:
+      - url
+    ContentGenerationVyondGoParams:
+      properties:
+        text:
+          type: string
+          description: Context or details about the video to be generated.
+        method:
+          type: string
+          enum:
+          - topic
+          - script
+          description: Method to use the text or uploaded file for video generation.
+          default: topic
+        extractParams:
+          type: boolean
+          description: Flag indicating whether video generation settings should be extracted from input data. If true, only `text` or `file` is required.
+        callbackInfo:
+          type: object
+          oneOf:
+          - $ref: '#/components/schemas/ZapierCallbackInfo'
+          discriminator:
+            propertyName: type
+            mapping:
+              zapier: '#/components/schemas/ZapierCallbackInfo'
+          description: Callback settings for notifying Zapier the video generation result.
+          deprecated: true
+        layout:
+          type: object
+          oneOf:
+          - $ref: '#/components/schemas/TalkingHeadLayoutSetting'
+          - $ref: '#/components/schemas/ConversationLayoutSetting'
+          - $ref: '#/components/schemas/NarratedLayoutSetting'
+          discriminator:
+            propertyName: type
+            mapping:
+              TALKING_HEAD: '#/components/schemas/TalkingHeadLayoutSetting'
+              TWO_PERSON_CONVERSATION: '#/components/schemas/ConversationLayoutSetting'
+              NARRATED: '#/components/schemas/NarratedLayoutSetting'
+          description: Settings for the video layout.
+          default:
+            type: TWO_PERSON_CONVERSATION
+            template: OPEN_OFFICE
+        format:
+          type: string
+          enum:
+          - ANECDOTE
+          - ANNOUNCEMENT
+          - DEBATE
+          - DIATRIBE
+          - HOT_TO
+          - OVERVIEW
+          - TIPS
+          description: Format of the generated video.
+          default: OVERVIEW
+        tone:
+          type: string
+          enum:
+          - PROFESSIONAL
+          - CASUAL
+          - SERIOUS
+          - FORMAL
+          - PLAYFUL
+          - FRIENDLY
+          - TRUSTWORTHY
+          - ENTERTAINING
+          - INFORMATIVE
+          - SILLY
+          description: Tone of the generated video.
+          default: INFORMATIVE
+        characters:
+          items:
+            $ref: '#/components/schemas/Character'
+          type: array
+          uniqueItems: true
+          maxItems: 2
+          description: Characters to be used in the video. If is not provided for a specific person in the video, default character will be used for that person.
+        voices:
+          items:
+            $ref: '#/components/schemas/TextToSpeechSetting'
+          maxItems: 2
+          type: array
+          description: Text-to-speech setting for each person in the video. Number of required settings is depend on the layout of choice.
+        language:
+          $ref: '#/components/schemas/LanguageSetting'
+        file:
+          type: string
+          format: binary
+          description: Uploaded file. Only supported in `multipart/form-data` request.
+      type: object
+      required:
+      - text
+      description: Parameters required for `vyondGo` generation type
+    ZapierCallbackInfo:
+      properties:
+        type:
+          type: string
+          enum:
+          - zapier
+          description: Callback info type
+        webhookUrl:
+          format: url
+          type: string
+          description: Callback URL generated by Zapier. Must starts with `https://hooks.zapier.com/`.
+      type: object
+      required:
+      - type
+    ContentGenerationV2GetResBody:
+      properties:
+        type:
+          type: string
+          enum:
+          - vyondGo
+          - aiAvatar
+          description: Generation type
+        id:
+          format: uuid
+          type: string
+          description: Generation task ID
+        videoId:
+          format: uuid
+          type: string
+          description: Video ID
+        status:
+          enum:
+          - pending
+          - processing
+          - success
+          - failed
+          type: string
+          description: Task status
+        name:
+          type: string
+          description: Video name
+        url:
+          type: string
+          description: Vyond web URL of the video
+        downloadUrl:
+          format: url
+          type: string
+          description: Download URL of generated video
+        expiredAt:
+          pattern: \d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d.\d+Z?
+          type: string
+          description: Expiration time of download URL
+      type: object
+      required:
+      - type
+      - id
+      - videoId
+      - status
+      - name
+      - url
     ConversationLayoutSetting:
       properties:
         template:
@@ -224,61 +414,98 @@ components:
       required:
       - template
       - type
-    NarratedLayoutSetting:
+    AvatarVoiceParams:
       properties:
-        template:
+        voiceId:
+          type: string
+          description: Voice ID from voice provider.
+        engine:
           type: string
           enum:
-          - ABSTRACT_WAVES
-          - SCRAPBOOK
-          - DYNAMIC
-          - POP_ART
-          - GOLD_ELEMENTAL_1_1
-          - GOLD_ELEMENTAL
-          - GOLD_ELEMENTAL_9_16
-          - SPIRAL_NOTEBOOK
-          - ON_THE_PULSE
-          - PATHFINDER
-          - MARKET_INSIGHTS
-          - MANUFACTURING_PROCESS
-          - MEDICAL_SCIENCE
-          - DIGITAL_NETWORK
-          - LEARNING
-          - TEAMWORK
-          - CREATIVE_COLLABORATION
-          - MIXED_LAYOUT_TEMP
-          - FEATURED_PROP_MIRROR_TEMP
-          - INFO_TICKER
-          - VOICEOVER_SLIDESHOW
-          - FLASH_CARDS
-          - SIMPLE_WHITEBOARD
-          - CERULEAN
-          - D2V_FIT_NARRATION
-          - D2V_FILL_NARRATION
-          - ABSTRACT_WAVES_PURPLE
-          - ON_THE_PULSE_LIGHT_PURPLE
-          - ORBITAL
-          - LATTICE
-          - CONFETTI
-          - MERIDIAN_NARRATION
-          - CITRINA_NARRATION
-          - PRASINO
-          - ARANCIONE
-          - DOSSIER
-          - BEAMO
-          - STRIKE
-          description: Template of the layout.
-        type:
+          - neural
+          - standard
+          - google-chirp3-engine
+          - google-gemini-engine
+          - eleven_v3
+          description: 'Engine from voice provider.<br>Google Chirp3 voices support `google-chirp3-engine` only.<br>Google Gemini voices support `google-gemini-engine` only.<br>ElevenLabs voices support `eleven_v3` only.<br>Azure voices support `neural` only.<br>AWS voices support either one or both of `neural` and `standard`, depending on each voice.<br>If value not provided, would determine based on the voice.<br>Note: if multiple engines are supported by the voice, the default value would be the first one of below order: `google-chirp3-engine`, `google-gemini-engine`, `eleven_v3`, `neural`, `standard`'
+        pitch:
           type: string
           enum:
-          - TALKING_HEAD
-          - TWO_PERSON_CONVERSATION
-          - NARRATED
-          description: Type of the layout.
+          - veryHigh
+          - high
+          - mediumHigh
+          - slightlyHigh
+          - default
+          - slightlyLow
+          - mediumLow
+          - low
+          - veryLow
+          description: Pitch of the voice. Please note that not all voices support the option.
+          default: default
+        rate:
+          type: string
+          enum:
+          - veryFast
+          - fast
+          - mediumFast
+          - slightlyFast
+          - default
+          - slightlySlow
+          - mediumSlow
+          - slow
+          - verySlow
+          description: Speed of the voice. Please note that not all voices support the option.
+          default: default
+        style:
+          type: string
+          enum:
+          - advertisement-upbeat
+          - affectionate
+          - angry
+          - assistant
+          - calm
+          - chat
+          - cheerful
+          - conversation
+          - customerservice
+          - depressed
+          - disgruntled
+          - documentary-narration
+          - embarrassed
+          - empathetic
+          - envious
+          - excited
+          - fearful
+          - friendly
+          - gentle
+          - hopeful
+          - lyrical
+          - narration-professional
+          - narration-relaxed
+          - newscast
+          - newscast-casual
+          - newscast-formal
+          - poetry-reading
+          - sad
+          - serious
+          - shouting
+          - sports-commentary
+          - sports-commentary-excited
+          - terrified
+          - unfriendly
+          - whispering
+          - domain_news
+          - effect_soft
+          - effect_whisper
+          - default
+          - Conversational
+          - Promo
+          - Character
+          description: Tone of the voice. Please note that not all voices support the option. First tone available for the voice would be used as default.
       type: object
       required:
-      - template
-      - type
+      - voiceId
+      description: The voice actor for the AI avatar video. If not provided, an actor based on avatar's gender speaking the provided language would be used.
     TalkingHeadLayoutSetting:
       properties:
         template:
@@ -382,160 +609,6 @@ components:
       required:
       - person
       - src
-    ContentGenerationAiAvatarParams:
-      properties:
-        script:
-          type: string
-          description: The text for the avatar to read.
-        provider:
-          type: string
-          enum:
-          - tavus
-          - heygen
-          description: Avatar provider.
-        avatarId:
-          type: string
-          description: Avatar ID.
-        background:
-          type: string
-          enum:
-          - default
-          - transparent
-          - Brickwall.png
-          - Colorfullandscape.png
-          - HomeWindow.png
-          - Hospital.png
-          - Lab.png
-          - Office03v.png
-          - Officelobby.png
-          - Pattern_Green02.png
-          description: Avatar background. By default use the background in avatar from provider.
-          default: default
-        customBackground:
-          type: integer
-          description: UGC asset ID of avatar custom background, which would override `background` parameter.
-        language:
-          type: string
-          description: Language of the script.
-          default: en-US
-        voice:
-          $ref: '#/components/schemas/AvatarVoiceParams'
-      type: object
-      required:
-      - script
-      - provider
-      - avatarId
-      description: Parameters required for `aiAvatar` generation type
-    ContentGenerationVyondGoParams:
-      properties:
-        text:
-          type: string
-          description: Context or details about the video to be generated.
-        method:
-          type: string
-          enum:
-          - topic
-          - script
-          description: Method to use the text or uploaded file for video generation.
-          default: topic
-        extractParams:
-          type: boolean
-          description: Flag indicating whether video generation settings should be extracted from input
-            data. If true, only `text` or `file` is required.
-        callbackInfo:
-          type: object
-          oneOf:
-          - $ref: '#/components/schemas/ZapierCallbackInfo'
-          discriminator:
-            propertyName: type
-            mapping:
-              zapier: '#/components/schemas/ZapierCallbackInfo'
-          description: Callback settings for notifying Zapier the video generation result.
-          deprecated: true
-        layout:
-          type: object
-          oneOf:
-          - $ref: '#/components/schemas/TalkingHeadLayoutSetting'
-          - $ref: '#/components/schemas/ConversationLayoutSetting'
-          - $ref: '#/components/schemas/NarratedLayoutSetting'
-          discriminator:
-            propertyName: type
-            mapping:
-              TALKING_HEAD: '#/components/schemas/TalkingHeadLayoutSetting'
-              TWO_PERSON_CONVERSATION: '#/components/schemas/ConversationLayoutSetting'
-              NARRATED: '#/components/schemas/NarratedLayoutSetting'
-          description: Settings for the video layout.
-          default:
-            type: TWO_PERSON_CONVERSATION
-            template: OPEN_OFFICE
-        format:
-          type: string
-          enum:
-          - ANECDOTE
-          - ANNOUNCEMENT
-          - DEBATE
-          - DIATRIBE
-          - HOT_TO
-          - OVERVIEW
-          - TIPS
-          description: Format of the generated video.
-          default: OVERVIEW
-        tone:
-          type: string
-          enum:
-          - PROFESSIONAL
-          - CASUAL
-          - SERIOUS
-          - FORMAL
-          - PLAYFUL
-          - FRIENDLY
-          - TRUSTWORTHY
-          - ENTERTAINING
-          - INFORMATIVE
-          - SILLY
-          description: Tone of the generated video.
-          default: INFORMATIVE
-        characters:
-          items:
-            $ref: '#/components/schemas/Character'
-          type: array
-          uniqueItems: true
-          maxItems: 2
-          description: Characters to be used in the video. If is not provided for a specific person in
-            the video, default character will be used for that person.
-        voices:
-          items:
-            $ref: '#/components/schemas/TextToSpeechSetting'
-          maxItems: 2
-          type: array
-          description: Text-to-speech setting for each person in the video. Number of required settings
-            is depend on the layout of choice.
-        language:
-          $ref: '#/components/schemas/LanguageSetting'
-        file:
-          type: string
-          format: binary
-          description: Uploaded file. Only supported in `multipart/form-data` request.
-      type: object
-      required:
-      - text
-      description: Parameters required for `vyondGo` generation type
-    LanguageSetting:
-      properties:
-        target:
-          type: string
-          description: Target language of the generated video.
-        accent:
-          type: string
-          description: Accent of the target language.
-      type: object
-      required:
-      - target
-      - accent
-      description: Video language setting.
-      default:
-        target: en
-        accent: United States
     TextToSpeechSetting:
       properties:
         voiceId:
@@ -616,169 +689,6 @@ components:
       type: object
       required:
       - voiceId
-    CallbackWebhook:
-      properties:
-        url:
-          format: url
-          type: string
-          description: Webhook URL. Must be in https protocol.
-        secret:
-          pattern: ^[0-9A-Za-z]{64}$
-          type: string
-          minLength: 64
-          maxLength: 64
-          description: Webhook secret for [signing the webhook event request by Vyond](#tag/Webhook/Verifying-Vyond-Signatures).
-            If not provided, there is no signature in request. The secret should be in length 64 and contains
-            only digits and English alphabets.
-      type: object
-      required:
-      - url
-    ContentGenerationV2GetResBody:
-      properties:
-        type:
-          type: string
-          enum:
-          - vyondGo
-          - aiAvatar
-          description: Generation type
-        id:
-          format: uuid
-          type: string
-          description: Generation task ID
-        videoId:
-          format: uuid
-          type: string
-          description: Video ID
-        status:
-          enum:
-          - pending
-          - processing
-          - success
-          - failed
-          type: string
-          description: Task status
-        name:
-          type: string
-          description: Video name
-        url:
-          type: string
-          description: Vyond web URL of the video
-        downloadUrl:
-          format: url
-          type: string
-          description: Download URL of generated video
-        expiredAt:
-          pattern: \d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d.\d+Z?
-          type: string
-          description: Expiration time of download URL
-      type: object
-      required:
-      - type
-      - id
-      - videoId
-      - status
-      - name
-      - url
-    AvatarVoiceParams:
-      properties:
-        voiceId:
-          type: string
-          description: Voice ID from voice provider.
-        engine:
-          type: string
-          enum:
-          - neural
-          - standard
-          - google-chirp3-engine
-          - google-gemini-engine
-          - eleven_v3
-          description: 'Engine from voice provider.<br>Google Chirp3 voices support `google-chirp3-engine`
-            only.<br>Google Gemini voices support `google-gemini-engine` only.<br>ElevenLabs voices support
-            `eleven_v3` only.<br>Azure voices support `neural` only.<br>AWS voices support either one
-            or both of `neural` and `standard`, depending on each voice.<br>If value not provided, would
-            determine based on the voice.<br>Note: if multiple engines are supported by the voice, the
-            default value would be the first one of below order: `google-chirp3-engine`, `google-gemini-engine`,
-            `eleven_v3`, `neural`, `standard`'
-        pitch:
-          type: string
-          enum:
-          - veryHigh
-          - high
-          - mediumHigh
-          - slightlyHigh
-          - default
-          - slightlyLow
-          - mediumLow
-          - low
-          - veryLow
-          description: Pitch of the voice. Please note that not all voices support the option.
-          default: default
-        rate:
-          type: string
-          enum:
-          - veryFast
-          - fast
-          - mediumFast
-          - slightlyFast
-          - default
-          - slightlySlow
-          - mediumSlow
-          - slow
-          - verySlow
-          description: Speed of the voice. Please note that not all voices support the option.
-          default: default
-        style:
-          type: string
-          enum:
-          - advertisement-upbeat
-          - affectionate
-          - angry
-          - assistant
-          - calm
-          - chat
-          - cheerful
-          - conversation
-          - customerservice
-          - depressed
-          - disgruntled
-          - documentary-narration
-          - embarrassed
-          - empathetic
-          - envious
-          - excited
-          - fearful
-          - friendly
-          - gentle
-          - hopeful
-          - lyrical
-          - narration-professional
-          - narration-relaxed
-          - newscast
-          - newscast-casual
-          - newscast-formal
-          - poetry-reading
-          - sad
-          - serious
-          - shouting
-          - sports-commentary
-          - sports-commentary-excited
-          - terrified
-          - unfriendly
-          - whispering
-          - domain_news
-          - effect_soft
-          - effect_whisper
-          - default
-          - Conversational
-          - Promo
-          - Character
-          description: Tone of the voice. Please note that not all voices support the option. First tone
-            available for the voice would be used as default.
-      type: object
-      required:
-      - voiceId
-      description: The voice actor for the AI avatar video. If not provided, an actor based on avatar's
-        gender speaking the provided language would be used.
     ContentGenerationCreateResBody:
       properties:
         id:
@@ -810,34 +720,105 @@ components:
       type: object
       required:
       - err
-    ZapierCallbackInfo:
+    NarratedLayoutSetting:
       properties:
+        template:
+          type: string
+          enum:
+          - ABSTRACT_WAVES
+          - SCRAPBOOK
+          - DYNAMIC
+          - POP_ART
+          - GOLD_ELEMENTAL_1_1
+          - GOLD_ELEMENTAL
+          - GOLD_ELEMENTAL_9_16
+          - SPIRAL_NOTEBOOK
+          - ON_THE_PULSE
+          - PATHFINDER
+          - MARKET_INSIGHTS
+          - MANUFACTURING_PROCESS
+          - MEDICAL_SCIENCE
+          - DIGITAL_NETWORK
+          - LEARNING
+          - TEAMWORK
+          - CREATIVE_COLLABORATION
+          - MIXED_LAYOUT_TEMP
+          - FEATURED_PROP_MIRROR_TEMP
+          - INFO_TICKER
+          - VOICEOVER_SLIDESHOW
+          - FLASH_CARDS
+          - SIMPLE_WHITEBOARD
+          - CERULEAN
+          - D2V_FIT_NARRATION
+          - D2V_FILL_NARRATION
+          - ABSTRACT_WAVES_PURPLE
+          - ON_THE_PULSE_LIGHT_PURPLE
+          - ORBITAL
+          - LATTICE
+          - CONFETTI
+          - MERIDIAN_NARRATION
+          - CITRINA_NARRATION
+          - PRASINO
+          - ARANCIONE
+          - DOSSIER
+          - BEAMO
+          - STRIKE
+          description: Template of the layout.
         type:
           type: string
           enum:
-          - zapier
-          description: Callback info type
-        webhookUrl:
-          format: url
-          type: string
-          description: Callback URL generated by Zapier. Must starts with `https://hooks.zapier.com/`.
+          - TALKING_HEAD
+          - TWO_PERSON_CONVERSATION
+          - NARRATED
+          description: Type of the layout.
       type: object
       required:
+      - template
       - type
-    ValidationDetail:
+    ContentGenerationAiAvatarParams:
       properties:
-        property:
+        script:
           type: string
-          description: The property that failed validation
-        message:
-          items:
-            type: string
-          type: array
-          description: Validation error messages for the property
+          description: The text for the avatar to read.
+        provider:
+          type: string
+          enum:
+          - tavus
+          - heygen
+          description: Avatar provider.
+        avatarId:
+          type: string
+          description: Avatar ID.
+        background:
+          type: string
+          enum:
+          - default
+          - transparent
+          - Brickwall.png
+          - Colorfullandscape.png
+          - HomeWindow.png
+          - Hospital.png
+          - Lab.png
+          - Office03v.png
+          - Officelobby.png
+          - Pattern_Green02.png
+          description: Avatar background. By default use the background in avatar from provider.
+          default: default
+        customBackground:
+          type: integer
+          description: UGC asset ID of avatar custom background, which would override `background` parameter.
+        language:
+          type: string
+          description: Language of the script.
+          default: en-US
+        voice:
+          $ref: '#/components/schemas/AvatarVoiceParams'
       type: object
       required:
-      - property
-      - message
+      - script
+      - provider
+      - avatarId
+      description: Parameters required for `aiAvatar` generation type
     ContentGenerationV2CreateReqBody:
       properties:
         type:

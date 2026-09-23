@@ -2,14 +2,10 @@ openapi: 3.2.0
 info:
   title: Vyond API Documentation Parameter API
   version: 1.1.0
-  description: 'APIs for getting parameters information
-
-    '
+  description: APIs for getting parameters information
 tags:
 - name: Parameter
-  description: 'APIs for getting parameters information
-
-    '
+  description: APIs for getting parameters information
 paths:
   /rest/v1/parameters/:
     get:
@@ -61,8 +57,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiErrorResponse'
-          description: Forbidden - missing required scope or invalid owner type, or user state validation
-            failed
+          description: Forbidden - missing required scope or invalid owner type, or user state validation failed
         '429':
           description: Too Many Requests - rate limit exceeded
           content:
@@ -80,10 +75,46 @@ paths:
       - Parameter
       security:
       - bearer: []
-      description: Get information (e.g. data type and values) of API parameters, some values may be filtered
-        based on user plan and account available features.
+      description: Get information (e.g. data type and values) of API parameters, some values may be filtered based on user plan and account available features.
 components:
   schemas:
+    ComponentsObject:
+      properties:
+        schemas:
+          type: object
+          description: OpenAPI schema lookup by name, i.e. `Record<string, Schema>`
+      type: object
+      required:
+      - schemas
+    ValidationDetail:
+      properties:
+        property:
+          type: string
+          description: The property that failed validation
+        message:
+          items:
+            type: string
+          type: array
+          description: Validation error messages for the property
+      type: object
+      required:
+      - property
+      - message
+    ValueObject:
+      properties:
+        value:
+          not:
+            type: 'null'
+          description: Parameter value
+        name:
+          type: string
+          description: Display name of the parameter value
+        properties:
+          type: object
+          description: Properties of the parameter value
+      type: object
+      required:
+      - value
     Parameter:
       properties:
         key:
@@ -138,14 +169,6 @@ components:
       type: object
       required:
       - err
-    ComponentsObject:
-      properties:
-        schemas:
-          type: object
-          description: OpenAPI schema lookup by name, i.e. `Record<string, Schema>`
-      type: object
-      required:
-      - schemas
     GetParametersResBody:
       properties:
         parameters:
@@ -161,35 +184,6 @@ components:
       required:
       - parameters
       - components
-    ValueObject:
-      properties:
-        value:
-          not:
-            type: 'null'
-          description: Parameter value
-        name:
-          type: string
-          description: Display name of the parameter value
-        properties:
-          type: object
-          description: Properties of the parameter value
-      type: object
-      required:
-      - value
-    ValidationDetail:
-      properties:
-        property:
-          type: string
-          description: The property that failed validation
-        message:
-          items:
-            type: string
-          type: array
-          description: Validation error messages for the property
-      type: object
-      required:
-      - property
-      - message
   securitySchemes:
     bearer:
       type: http

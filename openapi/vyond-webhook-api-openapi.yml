@@ -2,104 +2,22 @@ openapi: 3.2.0
 info:
   title: Vyond API Documentation Webhook API
   version: 1.1.0
-  description: "APIs for managing webhook\n\n## Verifying Vyond Signatures\n\nVyond webhook events are\
-    \ sent with a signature, which the destination server can use to verify that the events are authentic\
-    \ from Vyond. It is recommended to verify the signature before processing each webhook event.\n\n\
-    ### How to verify our signatures?\n\n1. Fetch the raw request body.\n\n    ```\n    const express\
-    \ = require('express');\n    const app = express();\n\n    app.use(express.json({\n        verify:\
-    \ (req, res, buf, encoding) => {\n            req.rawBody = buf.toString(encoding || 'utf-8');\n \
-    \       },\n    }));\n    ```\n\n2. Extract the timestamp from the request header `x-vyond-request-timestamp`\
-    \ and the signature from the request header `x-vyond-signature`.\n\n    ```\n    const timestamp =\
-    \ req.headers['x-vyond-request-timestamp'];\n    const signature = req.headers['x-vyond-signature'];\n\
-    \    ```\n\n3. Create a message by concatenating the timestamp and the raw request body together,\
-    \ using a colon (:) as a delimiter.\n\n    ```\n    const message = `${timestamp}:${req.rawBody}`;\n\
-    \    ```\n\n4. Verify the signature, an HMAC created using the SHA256 hash function, using the webhook\
-    \ secret as a key.\n\n    ```\n    const { webcrypto } = require('node:crypto');\n\n    const secret\
-    \ = 'your_webhook_secret';\n    const enc = new TextEncoder();\n    const key = await webcrypto.subtle.importKey(\n\
-    \        'raw',\n        enc.encode(secret),\n        {\n            name: 'HMAC',\n            hash:\
-    \ { name: 'SHA-256' },\n        },\n        false,\n        ['verify'],\n    );\n\n    const isValid\
-    \ = await webcrypto.subtle.verify(\n        { name: 'HMAC' },\n        key,\n        Buffer.from(signature,\
-    \ 'hex'),\n        enc.encode(message),\n    );\n    ```\n\n5. To enhance security and mitigate the\
-    \ risk of replay attacks, consider verifying the timestamp. Reject requests containing timestamps\
-    \ older than a defined tolerance, such as ten minutes, to ensure that the events are recent and valid.\n\
-    \n## Webhook events\n\n### Event body type definition\n\n```typescript\ntype WebhookEventBody = {\n\
-    \    event: string; // Refer to API for possible event types\n    data?: Record<string, unknown>;\
-    \ // Differ based on event type\n\n    // Exists if it is a failure event\n    error?: {\n       \
-    \ code: string;\n    };\n};\n```\n\n### Sample events\n\n**Video generation succeeded**\n\nNote: `expiredAt`\
-    \ is when the `downloadUrl` will expire.\n\n```json\n{\n    \"event\": \"video_generation.succeeded\"\
-    ,\n    \"data\": {\n        \"type\": \"vyondGo\",\n        \"id\": \"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\"\
-    ,\n        \"videoId\": \"yyyyyyyy-yyyy-yyyy-yyyy-yyyyyyyyyyyy\",\n        \"status\": \"success\"\
-    ,\n        \"name\": \"Video name\",\n        \"url\": \"https://app.vyond.org/videos/yyyyyyyy-yyyy-yyyy-yyyy-yyyyyyyyyyyy\"\
-    ,\n        \"downloadUrl\": \"{downloadUrl}\",\n        \"expiredAt\": \"2025-01-28T01:42:05.831Z\"\
-    \n    }\n}\n```\n\n**Video generation failed**\n\n```json\n{\n    \"event\": \"video_generation.failed\"\
-    ,\n    \"data\": {\n        \"type\": \"vyondGo\",\n        \"id\": \"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\"\
-    ,\n        \"videoId\": null,\n        \"status\": \"failed\",\n        \"name\": null,\n        \"\
-    url\": null\n    },\n    \"error\": {\n        \"code\": \"UNSUITABLE_CONTENT\"\n    }\n}\n```\n\n\
-    **Turbo generation succeeded**\n\nNote: `id` is the Turbo video generation task (thread) ID. `expiredAt`\
-    \ is when the `downloadUrl` will expire. `turboThreadUrl` is the webpage URL for you to view the chat\
-    \ and progress.\n\n```json\n{\n    \"event\": \"turbo_generation.succeeded\",\n    \"data\": {\n \
-    \       \"id\": \"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\",\n        \"status\": \"completed\",\n  \
-    \      \"turboThreadUrl\": \"https://app.vyond.com/turbo/t/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\"\
-    ,\n        \"downloadUrl\": \"{downloadUrl}\",\n        \"creditConsumed\": 10,\n        \"expiredAt\"\
-    : \"2025-01-28T01:42:05.831Z\"\n    }\n}\n```\n\n**Turbo generation failed**\n\nNote: `error.code`:\
-    \ `TIMEOUT` / `GENERATION_FAILED`.\n\n```json\n{\n    \"event\": \"turbo_generation.failed\",\n  \
-    \  \"data\": {\n        \"id\": \"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\",\n        \"status\": \"\
-    failed\",\n        \"turboThreadUrl\": \"https://app.vyond.com/turbo/t/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\"\
-    \n    },\n    \"error\": {\n        \"code\": \"GENERATION_FAILED\"\n    }\n}\n```\n\n**Turbo generation\
-    \ cancelled**\n\n```json\n{\n    \"event\": \"turbo_generation.cancelled\",\n    \"data\": {\n   \
-    \     \"id\": \"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\",\n        \"status\": \"cancelled\",\n    \
-    \    \"turboThreadUrl\": \"https://app.vyond.com/turbo/t/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\"\n\
-    \    },\n    \"error\": {\n        \"code\": \"CANCELLED\"\n    }\n}\n```\n"
+  description: 'APIs for managing webhook
+
+
+    ## Verifying Vyond Signatures
+
+
+    Vyond webhook events are sent with a signature, which the destination server can use to verify that the events are authentic from Vyond.'
 tags:
 - name: Webhook
-  description: "APIs for managing webhook\n\n## Verifying Vyond Signatures\n\nVyond webhook events are\
-    \ sent with a signature, which the destination server can use to verify that the events are authentic\
-    \ from Vyond. It is recommended to verify the signature before processing each webhook event.\n\n\
-    ### How to verify our signatures?\n\n1. Fetch the raw request body.\n\n    ```\n    const express\
-    \ = require('express');\n    const app = express();\n\n    app.use(express.json({\n        verify:\
-    \ (req, res, buf, encoding) => {\n            req.rawBody = buf.toString(encoding || 'utf-8');\n \
-    \       },\n    }));\n    ```\n\n2. Extract the timestamp from the request header `x-vyond-request-timestamp`\
-    \ and the signature from the request header `x-vyond-signature`.\n\n    ```\n    const timestamp =\
-    \ req.headers['x-vyond-request-timestamp'];\n    const signature = req.headers['x-vyond-signature'];\n\
-    \    ```\n\n3. Create a message by concatenating the timestamp and the raw request body together,\
-    \ using a colon (:) as a delimiter.\n\n    ```\n    const message = `${timestamp}:${req.rawBody}`;\n\
-    \    ```\n\n4. Verify the signature, an HMAC created using the SHA256 hash function, using the webhook\
-    \ secret as a key.\n\n    ```\n    const { webcrypto } = require('node:crypto');\n\n    const secret\
-    \ = 'your_webhook_secret';\n    const enc = new TextEncoder();\n    const key = await webcrypto.subtle.importKey(\n\
-    \        'raw',\n        enc.encode(secret),\n        {\n            name: 'HMAC',\n            hash:\
-    \ { name: 'SHA-256' },\n        },\n        false,\n        ['verify'],\n    );\n\n    const isValid\
-    \ = await webcrypto.subtle.verify(\n        { name: 'HMAC' },\n        key,\n        Buffer.from(signature,\
-    \ 'hex'),\n        enc.encode(message),\n    );\n    ```\n\n5. To enhance security and mitigate the\
-    \ risk of replay attacks, consider verifying the timestamp. Reject requests containing timestamps\
-    \ older than a defined tolerance, such as ten minutes, to ensure that the events are recent and valid.\n\
-    \n## Webhook events\n\n### Event body type definition\n\n```typescript\ntype WebhookEventBody = {\n\
-    \    event: string; // Refer to API for possible event types\n    data?: Record<string, unknown>;\
-    \ // Differ based on event type\n\n    // Exists if it is a failure event\n    error?: {\n       \
-    \ code: string;\n    };\n};\n```\n\n### Sample events\n\n**Video generation succeeded**\n\nNote: `expiredAt`\
-    \ is when the `downloadUrl` will expire.\n\n```json\n{\n    \"event\": \"video_generation.succeeded\"\
-    ,\n    \"data\": {\n        \"type\": \"vyondGo\",\n        \"id\": \"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\"\
-    ,\n        \"videoId\": \"yyyyyyyy-yyyy-yyyy-yyyy-yyyyyyyyyyyy\",\n        \"status\": \"success\"\
-    ,\n        \"name\": \"Video name\",\n        \"url\": \"https://app.vyond.org/videos/yyyyyyyy-yyyy-yyyy-yyyy-yyyyyyyyyyyy\"\
-    ,\n        \"downloadUrl\": \"{downloadUrl}\",\n        \"expiredAt\": \"2025-01-28T01:42:05.831Z\"\
-    \n    }\n}\n```\n\n**Video generation failed**\n\n```json\n{\n    \"event\": \"video_generation.failed\"\
-    ,\n    \"data\": {\n        \"type\": \"vyondGo\",\n        \"id\": \"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\"\
-    ,\n        \"videoId\": null,\n        \"status\": \"failed\",\n        \"name\": null,\n        \"\
-    url\": null\n    },\n    \"error\": {\n        \"code\": \"UNSUITABLE_CONTENT\"\n    }\n}\n```\n\n\
-    **Turbo generation succeeded**\n\nNote: `id` is the Turbo video generation task (thread) ID. `expiredAt`\
-    \ is when the `downloadUrl` will expire. `turboThreadUrl` is the webpage URL for you to view the chat\
-    \ and progress.\n\n```json\n{\n    \"event\": \"turbo_generation.succeeded\",\n    \"data\": {\n \
-    \       \"id\": \"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\",\n        \"status\": \"completed\",\n  \
-    \      \"turboThreadUrl\": \"https://app.vyond.com/turbo/t/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\"\
-    ,\n        \"downloadUrl\": \"{downloadUrl}\",\n        \"creditConsumed\": 10,\n        \"expiredAt\"\
-    : \"2025-01-28T01:42:05.831Z\"\n    }\n}\n```\n\n**Turbo generation failed**\n\nNote: `error.code`:\
-    \ `TIMEOUT` / `GENERATION_FAILED`.\n\n```json\n{\n    \"event\": \"turbo_generation.failed\",\n  \
-    \  \"data\": {\n        \"id\": \"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\",\n        \"status\": \"\
-    failed\",\n        \"turboThreadUrl\": \"https://app.vyond.com/turbo/t/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\"\
-    \n    },\n    \"error\": {\n        \"code\": \"GENERATION_FAILED\"\n    }\n}\n```\n\n**Turbo generation\
-    \ cancelled**\n\n```json\n{\n    \"event\": \"turbo_generation.cancelled\",\n    \"data\": {\n   \
-    \     \"id\": \"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\",\n        \"status\": \"cancelled\",\n    \
-    \    \"turboThreadUrl\": \"https://app.vyond.com/turbo/t/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\"\n\
-    \    },\n    \"error\": {\n        \"code\": \"CANCELLED\"\n    }\n}\n```\n"
+  description: 'APIs for managing webhook
+
+
+    ## Verifying Vyond Signatures
+
+
+    Vyond webhook events are sent with a signature, which the destination server can use to verify that the events are authentic from Vyond.'
 paths:
   /rest/v1/webhooks/:
     get:
@@ -299,15 +217,21 @@ paths:
       description: Delete an existing webhook
 components:
   schemas:
-    WebhookUpdateReqBody:
+    WebhookWithSecret:
       properties:
+        secret:
+          type: string
+          description: Secret of the webhook which is required to [verify signatures](#tag/Webhook/Verifying-Vyond-Signatures) from Vyond,             note that this secret is only available at time of webhook creation
+        webhookId:
+          type: string
+          description: ID of the webhook
         name:
           type: string
           description: Name of the webhook
         url:
           format: url
           type: string
-          description: URL of the webhook, protocol must be https
+          description: URL of the webhook, must be in https
         events:
           items:
             enum:
@@ -327,31 +251,12 @@ components:
           - disabled
           description: Status of the webhook
       type: object
-    WebhookCreateReqBody:
-      properties:
-        name:
-          type: string
-          description: Name of the webhook
-        url:
-          format: url
-          type: string
-          description: URL of the webhook, protocol must be https
-        events:
-          items:
-            enum:
-            - video_generation.succeeded
-            - video_generation.failed
-            - video_export.succeeded
-            - video_export.failed
-            - turbo_generation.succeeded
-            - turbo_generation.failed
-            type: string
-          type: array
-          description: Events that the webhook subscribed to
-      type: object
       required:
+      - secret
+      - webhookId
       - url
       - events
+      - status
     ValidationDetail:
       properties:
         property:
@@ -366,38 +271,6 @@ components:
       required:
       - property
       - message
-    WebhookListResBody:
-      properties:
-        data:
-          items:
-            $ref: '#/components/schemas/Webhook'
-          type: array
-          description: List of webhooks
-      type: object
-      required:
-      - data
-    ApiErrorResponse:
-      properties:
-        err:
-          type: string
-          description: Error code identifying the specific error
-        reason:
-          type: string
-          description: Additional reason describing why the error occurred
-        message:
-          type: string
-          description: Error message, used as an alternative to reason for non-enumerated error messages
-        scimType:
-          type: string
-          description: SCIM error type, present on SCIM 409 Conflict responses (e.g. uniqueness)
-        details:
-          items:
-            $ref: '#/components/schemas/ValidationDetail'
-          type: array
-          description: Validation error details, present when err is REQUEST_VALIDATION_FAILED
-      type: object
-      required:
-      - err
     Webhook:
       properties:
         webhookId:
@@ -434,22 +307,15 @@ components:
       - url
       - events
       - status
-    WebhookWithSecret:
+    WebhookUpdateReqBody:
       properties:
-        secret:
-          type: string
-          description: Secret of the webhook which is required to [verify signatures](#tag/Webhook/Verifying-Vyond-Signatures)
-            from Vyond,             note that this secret is only available at time of webhook creation
-        webhookId:
-          type: string
-          description: ID of the webhook
         name:
           type: string
           description: Name of the webhook
         url:
           format: url
           type: string
-          description: URL of the webhook, must be in https
+          description: URL of the webhook, protocol must be https
         events:
           items:
             enum:
@@ -469,12 +335,63 @@ components:
           - disabled
           description: Status of the webhook
       type: object
+    WebhookListResBody:
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/Webhook'
+          type: array
+          description: List of webhooks
+      type: object
       required:
-      - secret
-      - webhookId
+      - data
+    WebhookCreateReqBody:
+      properties:
+        name:
+          type: string
+          description: Name of the webhook
+        url:
+          format: url
+          type: string
+          description: URL of the webhook, protocol must be https
+        events:
+          items:
+            enum:
+            - video_generation.succeeded
+            - video_generation.failed
+            - video_export.succeeded
+            - video_export.failed
+            - turbo_generation.succeeded
+            - turbo_generation.failed
+            type: string
+          type: array
+          description: Events that the webhook subscribed to
+      type: object
+      required:
       - url
       - events
-      - status
+    ApiErrorResponse:
+      properties:
+        err:
+          type: string
+          description: Error code identifying the specific error
+        reason:
+          type: string
+          description: Additional reason describing why the error occurred
+        message:
+          type: string
+          description: Error message, used as an alternative to reason for non-enumerated error messages
+        scimType:
+          type: string
+          description: SCIM error type, present on SCIM 409 Conflict responses (e.g. uniqueness)
+        details:
+          items:
+            $ref: '#/components/schemas/ValidationDetail'
+          type: array
+          description: Validation error details, present when err is REQUEST_VALIDATION_FAILED
+      type: object
+      required:
+      - err
   securitySchemes:
     bearer:
       type: http

@@ -2,14 +2,10 @@ openapi: 3.2.0
 info:
   title: Vyond API Documentation User API
   version: 1.1.0
-  description: 'APIs related to user
-
-    '
+  description: APIs related to user
 tags:
 - name: User
-  description: 'APIs related to user
-
-    '
+  description: APIs related to user
 paths:
   /rest/v1/users/me:
     get:
@@ -75,6 +71,20 @@ components:
       type: object
       required:
       - err
+    ValidationDetail:
+      properties:
+        property:
+          type: string
+          description: The property that failed validation
+        message:
+          items:
+            type: string
+          type: array
+          description: Validation error messages for the property
+      type: object
+      required:
+      - property
+      - message
     GetUserResBody:
       properties:
         accountId:
@@ -94,20 +104,6 @@ components:
       - userId
       - userPlan
       - username
-    ValidationDetail:
-      properties:
-        property:
-          type: string
-          description: The property that failed validation
-        message:
-          items:
-            type: string
-          type: array
-          description: Validation error messages for the property
-      type: object
-      required:
-      - property
-      - message
   securitySchemes:
     bearer:
       type: http

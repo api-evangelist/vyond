@@ -1,14 +1,7 @@
 {
   "provider": "vyond",
   "sources": [
-    "vyond-content-generation-api-openapi.yml",
-    "vyond-parameter-api-openapi.yml",
-    "vyond-scim-api-openapi.yml",
-    "vyond-turbo-api-openapi.yml",
-    "vyond-user-api-openapi.yml",
-    "vyond-video-api-openapi.yml",
-    "vyond-video-export-api-openapi.yml",
-    "vyond-webhook-api-openapi.yml"
+    "_original/vyond-openapi-original.json"
   ],
   "outputs": [
     "vyond-content-generation-api-openapi.yml",
@@ -24,15 +17,19 @@
   "errors": [],
   "warnings": [],
   "notes": [
-    "vyond-content-generation-api-openapi.yml: upgraded openapi 3.0.0 -> OpenAPI 3.2.0",
-    "vyond-parameter-api-openapi.yml: upgraded openapi 3.0.0 -> OpenAPI 3.2.0",
-    "vyond-scim-api-openapi.yml: upgraded openapi 3.0.0 -> OpenAPI 3.2.0",
-    "vyond-turbo-api-openapi.yml: upgraded openapi 3.0.0 -> OpenAPI 3.2.0",
-    "vyond-user-api-openapi.yml: upgraded openapi 3.0.0 -> OpenAPI 3.2.0",
-    "vyond-video-api-openapi.yml: upgraded openapi 3.0.0 -> OpenAPI 3.2.0",
-    "vyond-video-export-api-openapi.yml: upgraded openapi 3.0.0 -> OpenAPI 3.2.0",
-    "vyond-webhook-api-openapi.yml: upgraded openapi 3.0.0 -> OpenAPI 3.2.0",
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "vyond-openapi-original.json: upgraded openapi 3.0.0 -> OpenAPI 3.2.0",
+    "vyond-openapi-original.json: declared missing tag: Video",
     "apis.yml register: already-registered"
   ],
-  "skipped": []
+  "skipped": [
+    "vyond-content-generation-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "vyond-parameter-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "vyond-scim-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "vyond-turbo-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "vyond-user-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "vyond-video-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "vyond-video-export-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "vyond-webhook-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }

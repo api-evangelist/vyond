@@ -2,74 +2,10 @@ openapi: 3.2.0
 info:
   title: Vyond API Documentation Turbo API
   version: 1.1.0
-  description: 'APIs for creating and tracking Turbo video generation tasks.
-
-
-    Turbo lets you generate a video from a text prompt, optionally grounded on reference files (e.g. `.txt`,
-    `.pdf`, `.docx`, `.pptx`). Submit a prompt to start a task, then poll the task by its ID to retrieve
-    the status and, once completed, the download URL of the generated video.
-
-
-    ## Webhook events
-
-
-    Instead of polling, you can listen to webhook events to be notified when a Turbo task completes. Webhook
-    events are always emitted for every task, so you can register a webhook subscription (owner type `user`)
-    before the task completes, or supply a one-off `callbackWebhook` in the create request.
-
-
-    | Event                        | Description                                                                                                         |
-
-    | ---------------------------- | -------------------------------------------------------------------------------------------------------------------
-    |
-
-    | `turbo_generation.succeeded` | The Turbo video generation completed successfully. `data` contains
-    `downloadUrl`, `creditConsumed` and `expiredAt`. |
-
-    | `turbo_generation.failed`    | The Turbo video generation failed (or timed out). An `error.code`
-    is included.                                      |
-
-
-    The event `data` contains `id` (the task/thread ID), `status` and `turboThreadUrl`. Refer to [Webhook
-    events](#tag/Webhook/Webhook-events) for the event body type definition, signature verification and
-    sample payloads.
-
-    '
+  description: APIs for creating and tracking Turbo video generation tasks.
 tags:
 - name: Turbo
-  description: 'APIs for creating and tracking Turbo video generation tasks.
-
-
-    Turbo lets you generate a video from a text prompt, optionally grounded on reference files (e.g. `.txt`,
-    `.pdf`, `.docx`, `.pptx`). Submit a prompt to start a task, then poll the task by its ID to retrieve
-    the status and, once completed, the download URL of the generated video.
-
-
-    ## Webhook events
-
-
-    Instead of polling, you can listen to webhook events to be notified when a Turbo task completes. Webhook
-    events are always emitted for every task, so you can register a webhook subscription (owner type `user`)
-    before the task completes, or supply a one-off `callbackWebhook` in the create request.
-
-
-    | Event                        | Description                                                                                                         |
-
-    | ---------------------------- | -------------------------------------------------------------------------------------------------------------------
-    |
-
-    | `turbo_generation.succeeded` | The Turbo video generation completed successfully. `data` contains
-    `downloadUrl`, `creditConsumed` and `expiredAt`. |
-
-    | `turbo_generation.failed`    | The Turbo video generation failed (or timed out). An `error.code`
-    is included.                                      |
-
-
-    The event `data` contains `id` (the task/thread ID), `status` and `turboThreadUrl`. Refer to [Webhook
-    events](#tag/Webhook/Webhook-events) for the event body type definition, signature verification and
-    sample payloads.
-
-    '
+  description: APIs for creating and tracking Turbo video generation tasks.
 paths:
   /rest/v1/turbo/:
     post:
@@ -185,14 +121,6 @@ paths:
       description: Get the status and download URL of a Turbo video generation task by ID
 components:
   schemas:
-    TurboCreateResBody:
-      properties:
-        id:
-          type: string
-          description: Turbo video generation task (thread) ID.
-      type: object
-      required:
-      - id
     TurboGetResBody:
       properties:
         status:
@@ -222,6 +150,35 @@ components:
       required:
       - status
       - turboThreadUrl
+    ValidationDetail:
+      properties:
+        property:
+          type: string
+          description: The property that failed validation
+        message:
+          items:
+            type: string
+          type: array
+          description: Validation error messages for the property
+      type: object
+      required:
+      - property
+      - message
+    CallbackWebhook:
+      properties:
+        url:
+          format: url
+          type: string
+          description: Webhook URL. Must be in https protocol.
+        secret:
+          pattern: ^[0-9A-Za-z]{64}$
+          type: string
+          minLength: 64
+          maxLength: 64
+          description: Webhook secret for [signing the webhook event request by Vyond](#tag/Webhook/Verifying-Vyond-Signatures). If not provided, there is no signature in request. The secret should be in length 64 and contains only digits and English alphabets.
+      type: object
+      required:
+      - url
     TurboCreateReqBody:
       properties:
         prompt:
@@ -242,8 +199,7 @@ components:
             format: binary
           maxItems: 3
           type: array
-          description: Reference files, each with a maximum size of 104857600 bytes. Documents are limited
-            to 100 pages. Only supported in `multipart/form-data` request.
+          description: Reference files, each with a maximum size of 104857600 bytes. Documents are limited to 100 pages. Only supported in `multipart/form-data` request.
         callbackWebhook:
           $ref: '#/components/schemas/CallbackWebhook'
           type: object
@@ -251,23 +207,6 @@ components:
       type: object
       required:
       - prompt
-    CallbackWebhook:
-      properties:
-        url:
-          format: url
-          type: string
-          description: Webhook URL. Must be in https protocol.
-        secret:
-          pattern: ^[0-9A-Za-z]{64}$
-          type: string
-          minLength: 64
-          maxLength: 64
-          description: Webhook secret for [signing the webhook event request by Vyond](#tag/Webhook/Verifying-Vyond-Signatures).
-            If not provided, there is no signature in request. The secret should be in length 64 and contains
-            only digits and English alphabets.
-      type: object
-      required:
-      - url
     ApiErrorResponse:
       properties:
         err:
@@ -290,20 +229,14 @@ components:
       type: object
       required:
       - err
-    ValidationDetail:
+    TurboCreateResBody:
       properties:
-        property:
+        id:
           type: string
-          description: The property that failed validation
-        message:
-          items:
-            type: string
-          type: array
-          description: Validation error messages for the property
+          description: Turbo video generation task (thread) ID.
       type: object
       required:
-      - property
-      - message
+      - id
   securitySchemes:
     bearer:
       type: http
