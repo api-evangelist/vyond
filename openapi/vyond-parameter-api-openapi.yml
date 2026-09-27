@@ -78,14 +78,6 @@ paths:
       description: Get information (e.g. data type and values) of API parameters, some values may be filtered based on user plan and account available features.
 components:
   schemas:
-    ComponentsObject:
-      properties:
-        schemas:
-          type: object
-          description: OpenAPI schema lookup by name, i.e. `Record<string, Schema>`
-      type: object
-      required:
-      - schemas
     ValidationDetail:
       properties:
         property:
@@ -115,6 +107,28 @@ components:
       type: object
       required:
       - value
+    ApiErrorResponse:
+      properties:
+        err:
+          type: string
+          description: Error code identifying the specific error
+        reason:
+          type: string
+          description: Additional reason describing why the error occurred
+        message:
+          type: string
+          description: Error message, used as an alternative to reason for non-enumerated error messages
+        scimType:
+          type: string
+          description: SCIM error type, present on SCIM 409 Conflict responses (e.g. uniqueness)
+        details:
+          items:
+            $ref: '#/components/schemas/ValidationDetail'
+          type: array
+          description: Validation error details, present when err is REQUEST_VALIDATION_FAILED
+      type: object
+      required:
+      - err
     Parameter:
       properties:
         key:
@@ -147,28 +161,14 @@ components:
       - name
       - schema
       - values
-    ApiErrorResponse:
+    ComponentsObject:
       properties:
-        err:
-          type: string
-          description: Error code identifying the specific error
-        reason:
-          type: string
-          description: Additional reason describing why the error occurred
-        message:
-          type: string
-          description: Error message, used as an alternative to reason for non-enumerated error messages
-        scimType:
-          type: string
-          description: SCIM error type, present on SCIM 409 Conflict responses (e.g. uniqueness)
-        details:
-          items:
-            $ref: '#/components/schemas/ValidationDetail'
-          type: array
-          description: Validation error details, present when err is REQUEST_VALIDATION_FAILED
+        schemas:
+          type: object
+          description: OpenAPI schema lookup by name, i.e. `Record<string, Schema>`
       type: object
       required:
-      - err
+      - schemas
     GetParametersResBody:
       properties:
         parameters:

@@ -82,20 +82,6 @@ paths:
       description: Retrieve the download URL for a completed video export
 components:
   schemas:
-    ValidationDetail:
-      properties:
-        property:
-          type: string
-          description: The property that failed validation
-        message:
-          items:
-            type: string
-          type: array
-          description: Validation error messages for the property
-      type: object
-      required:
-      - property
-      - message
     ApiErrorResponse:
       properties:
         err:
@@ -148,6 +134,20 @@ components:
       - name
       - url
       - revision
+    ValidationDetail:
+      properties:
+        property:
+          type: string
+          description: The property that failed validation
+        message:
+          items:
+            type: string
+          type: array
+          description: Validation error messages for the property
+      type: object
+      required:
+      - property
+      - message
   securitySchemes:
     bearer:
       type: http
