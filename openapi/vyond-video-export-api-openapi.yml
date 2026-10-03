@@ -93,21 +93,14 @@ paths:
       description: Create export video task
 components:
   schemas:
-    CallbackWebhook:
+    ExportVideoResBody:
       properties:
-        url:
-          format: url
-          type: string
-          description: Webhook URL. Must be in https protocol.
-        secret:
-          pattern: ^[0-9A-Za-z]{64}$
-          type: string
-          minLength: 64
-          maxLength: 64
-          description: Webhook secret for [signing the webhook event request by Vyond](#tag/Webhook/Verifying-Vyond-Signatures). If not provided, there is no signature in request. The secret should be in length 64 and contains only digits and English alphabets.
+        conversionId:
+          type: integer
+          description: The conversion ID of the video export task
       type: object
       required:
-      - url
+      - conversionId
     ValidationDetail:
       properties:
         property:
@@ -122,14 +115,6 @@ components:
       required:
       - property
       - message
-    ExportVideoResBody:
-      properties:
-        conversionId:
-          type: integer
-          description: The conversion ID of the video export task
-      type: object
-      required:
-      - conversionId
     ExportVideoReqBody:
       properties:
         category:
@@ -197,6 +182,21 @@ components:
       type: object
       required:
       - err
+    CallbackWebhook:
+      properties:
+        url:
+          format: url
+          type: string
+          description: Webhook URL. Must be in https protocol.
+        secret:
+          pattern: ^[0-9A-Za-z]{64}$
+          type: string
+          minLength: 64
+          maxLength: 64
+          description: Webhook secret for [signing the webhook event request by Vyond](#tag/Webhook/Verifying-Vyond-Signatures). If not provided, there is no signature in request. The secret should be in length 64 and contains only digits and English alphabets.
+      type: object
+      required:
+      - url
   securitySchemes:
     bearer:
       type: http

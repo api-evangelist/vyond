@@ -78,6 +78,14 @@ paths:
       description: Get information (e.g. data type and values) of API parameters, some values may be filtered based on user plan and account available features.
 components:
   schemas:
+    ComponentsObject:
+      properties:
+        schemas:
+          type: object
+          description: OpenAPI schema lookup by name, i.e. `Record<string, Schema>`
+      type: object
+      required:
+      - schemas
     ValidationDetail:
       properties:
         property:
@@ -129,6 +137,21 @@ components:
       type: object
       required:
       - err
+    GetParametersResBody:
+      properties:
+        parameters:
+          items:
+            $ref: '#/components/schemas/Parameter'
+          type: array
+          description: Parameters available for the feature.
+        components:
+          $ref: '#/components/schemas/ComponentsObject'
+          type: object
+          description: OpenAPI components object
+      type: object
+      required:
+      - parameters
+      - components
     Parameter:
       properties:
         key:
@@ -161,29 +184,6 @@ components:
       - name
       - schema
       - values
-    ComponentsObject:
-      properties:
-        schemas:
-          type: object
-          description: OpenAPI schema lookup by name, i.e. `Record<string, Schema>`
-      type: object
-      required:
-      - schemas
-    GetParametersResBody:
-      properties:
-        parameters:
-          items:
-            $ref: '#/components/schemas/Parameter'
-          type: array
-          description: Parameters available for the feature.
-        components:
-          $ref: '#/components/schemas/ComponentsObject'
-          type: object
-          description: OpenAPI components object
-      type: object
-      required:
-      - parameters
-      - components
   securitySchemes:
     bearer:
       type: http

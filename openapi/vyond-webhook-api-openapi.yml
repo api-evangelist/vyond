@@ -217,6 +217,30 @@ paths:
       description: Delete an existing webhook
 components:
   schemas:
+    ValidationDetail:
+      properties:
+        property:
+          type: string
+          description: The property that failed validation
+        message:
+          items:
+            type: string
+          type: array
+          description: Validation error messages for the property
+      type: object
+      required:
+      - property
+      - message
+    WebhookListResBody:
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/Webhook'
+          type: array
+          description: List of webhooks
+      type: object
+      required:
+      - data
     ApiErrorResponse:
       properties:
         err:
@@ -239,20 +263,31 @@ components:
       type: object
       required:
       - err
-    ValidationDetail:
+    WebhookCreateReqBody:
       properties:
-        property:
+        name:
           type: string
-          description: The property that failed validation
-        message:
+          description: Name of the webhook
+        url:
+          format: url
+          type: string
+          description: URL of the webhook, protocol must be https
+        events:
           items:
+            enum:
+            - video_generation.succeeded
+            - video_generation.failed
+            - video_export.succeeded
+            - video_export.failed
+            - turbo_generation.succeeded
+            - turbo_generation.failed
             type: string
           type: array
-          description: Validation error messages for the property
+          description: Events that the webhook subscribed to
       type: object
       required:
-      - property
-      - message
+      - url
+      - events
     WebhookUpdateReqBody:
       properties:
         name:
@@ -281,15 +316,18 @@ components:
           - disabled
           description: Status of the webhook
       type: object
-    WebhookCreateReqBody:
+    Webhook:
       properties:
+        webhookId:
+          type: string
+          description: ID of the webhook
         name:
           type: string
           description: Name of the webhook
         url:
           format: url
           type: string
-          description: URL of the webhook, protocol must be https
+          description: URL of the webhook, must be in https
         events:
           items:
             enum:
@@ -302,10 +340,18 @@ components:
             type: string
           type: array
           description: Events that the webhook subscribed to
+        status:
+          type: string
+          enum:
+          - enabled
+          - disabled
+          description: Status of the webhook
       type: object
       required:
+      - webhookId
       - url
       - events
+      - status
     WebhookWithSecret:
       properties:
         secret:
@@ -346,52 +392,6 @@ components:
       - url
       - events
       - status
-    Webhook:
-      properties:
-        webhookId:
-          type: string
-          description: ID of the webhook
-        name:
-          type: string
-          description: Name of the webhook
-        url:
-          format: url
-          type: string
-          description: URL of the webhook, must be in https
-        events:
-          items:
-            enum:
-            - video_generation.succeeded
-            - video_generation.failed
-            - video_export.succeeded
-            - video_export.failed
-            - turbo_generation.succeeded
-            - turbo_generation.failed
-            type: string
-          type: array
-          description: Events that the webhook subscribed to
-        status:
-          type: string
-          enum:
-          - enabled
-          - disabled
-          description: Status of the webhook
-      type: object
-      required:
-      - webhookId
-      - url
-      - events
-      - status
-    WebhookListResBody:
-      properties:
-        data:
-          items:
-            $ref: '#/components/schemas/Webhook'
-          type: array
-          description: List of webhooks
-      type: object
-      required:
-      - data
   securitySchemes:
     bearer:
       type: http
