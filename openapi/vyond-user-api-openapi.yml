@@ -49,39 +49,6 @@ paths:
       description: Get information of current user based on the authorization
 components:
   schemas:
-    ValidationDetail:
-      properties:
-        property:
-          type: string
-          description: The property that failed validation
-        message:
-          items:
-            type: string
-          type: array
-          description: Validation error messages for the property
-      type: object
-      required:
-      - property
-      - message
-    GetUserResBody:
-      properties:
-        accountId:
-          type: string
-        email:
-          type: string
-        userId:
-          type: string
-        userPlan:
-          type: string
-        username:
-          type: string
-      type: object
-      required:
-      - accountId
-      - email
-      - userId
-      - userPlan
-      - username
     ApiErrorResponse:
       properties:
         err:
@@ -104,6 +71,39 @@ components:
       type: object
       required:
       - err
+    GetUserResBody:
+      properties:
+        accountId:
+          type: string
+        email:
+          type: string
+        userId:
+          type: string
+        userPlan:
+          type: string
+        username:
+          type: string
+      type: object
+      required:
+      - accountId
+      - email
+      - userId
+      - userPlan
+      - username
+    ValidationDetail:
+      properties:
+        property:
+          type: string
+          description: The property that failed validation
+        message:
+          items:
+            type: string
+          type: array
+          description: Validation error messages for the property
+      type: object
+      required:
+      - property
+      - message
   securitySchemes:
     bearer:
       type: http

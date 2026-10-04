@@ -121,48 +121,6 @@ paths:
       description: Get the status and download URL of a Turbo video generation task by ID
 components:
   schemas:
-    ValidationDetail:
-      properties:
-        property:
-          type: string
-          description: The property that failed validation
-        message:
-          items:
-            type: string
-          type: array
-          description: Validation error messages for the property
-      type: object
-      required:
-      - property
-      - message
-    TurboCreateReqBody:
-      properties:
-        prompt:
-          maxLength: 10000
-          type: string
-          minLength: 1
-          description: Prompt describing the video to generate.
-        mode:
-          type: string
-          enum:
-          - STILL_IMAGE
-          - VIDEO_CLIP
-          description: Video generation mode.
-          default: STILL_IMAGE
-        files:
-          items:
-            type: string
-            format: binary
-          maxItems: 3
-          type: array
-          description: Reference files, each with a maximum size of 104857600 bytes. Documents are limited to 100 pages. Only supported in `multipart/form-data` request.
-        callbackWebhook:
-          $ref: '#/components/schemas/CallbackWebhook'
-          type: object
-          description: Webhook for listening to webhook events of the Turbo video generation by Vyond.
-      type: object
-      required:
-      - prompt
     ApiErrorResponse:
       properties:
         err:
@@ -200,14 +158,20 @@ components:
       type: object
       required:
       - url
-    TurboCreateResBody:
+    ValidationDetail:
       properties:
-        id:
+        property:
           type: string
-          description: Turbo video generation task (thread) ID.
+          description: The property that failed validation
+        message:
+          items:
+            type: string
+          type: array
+          description: Validation error messages for the property
       type: object
       required:
-      - id
+      - property
+      - message
     TurboGetResBody:
       properties:
         status:
@@ -237,6 +201,42 @@ components:
       required:
       - status
       - turboThreadUrl
+    TurboCreateReqBody:
+      properties:
+        prompt:
+          maxLength: 10000
+          type: string
+          minLength: 1
+          description: Prompt describing the video to generate.
+        mode:
+          type: string
+          enum:
+          - STILL_IMAGE
+          - VIDEO_CLIP
+          description: Video generation mode.
+          default: STILL_IMAGE
+        files:
+          items:
+            type: string
+            format: binary
+          maxItems: 3
+          type: array
+          description: Reference files, each with a maximum size of 104857600 bytes. Documents are limited to 100 pages. Only supported in `multipart/form-data` request.
+        callbackWebhook:
+          $ref: '#/components/schemas/CallbackWebhook'
+          type: object
+          description: Webhook for listening to webhook events of the Turbo video generation by Vyond.
+      type: object
+      required:
+      - prompt
+    TurboCreateResBody:
+      properties:
+        id:
+          type: string
+          description: Turbo video generation task (thread) ID.
+      type: object
+      required:
+      - id
   securitySchemes:
     bearer:
       type: http

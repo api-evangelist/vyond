@@ -93,14 +93,43 @@ paths:
       description: Create export video task
 components:
   schemas:
-    ExportVideoResBody:
+    ApiErrorResponse:
       properties:
-        conversionId:
-          type: integer
-          description: The conversion ID of the video export task
+        err:
+          type: string
+          description: Error code identifying the specific error
+        reason:
+          type: string
+          description: Additional reason describing why the error occurred
+        message:
+          type: string
+          description: Error message, used as an alternative to reason for non-enumerated error messages
+        scimType:
+          type: string
+          description: SCIM error type, present on SCIM 409 Conflict responses (e.g. uniqueness)
+        details:
+          items:
+            $ref: '#/components/schemas/ValidationDetail'
+          type: array
+          description: Validation error details, present when err is REQUEST_VALIDATION_FAILED
       type: object
       required:
-      - conversionId
+      - err
+    CallbackWebhook:
+      properties:
+        url:
+          format: url
+          type: string
+          description: Webhook URL. Must be in https protocol.
+        secret:
+          pattern: ^[0-9A-Za-z]{64}$
+          type: string
+          minLength: 64
+          maxLength: 64
+          description: Webhook secret for [signing the webhook event request by Vyond](#tag/Webhook/Verifying-Vyond-Signatures). If not provided, there is no signature in request. The secret should be in length 64 and contains only digits and English alphabets.
+      type: object
+      required:
+      - url
     ValidationDetail:
       properties:
         property:
@@ -160,43 +189,14 @@ components:
       required:
       - category
       - resolution
-    ApiErrorResponse:
+    ExportVideoResBody:
       properties:
-        err:
-          type: string
-          description: Error code identifying the specific error
-        reason:
-          type: string
-          description: Additional reason describing why the error occurred
-        message:
-          type: string
-          description: Error message, used as an alternative to reason for non-enumerated error messages
-        scimType:
-          type: string
-          description: SCIM error type, present on SCIM 409 Conflict responses (e.g. uniqueness)
-        details:
-          items:
-            $ref: '#/components/schemas/ValidationDetail'
-          type: array
-          description: Validation error details, present when err is REQUEST_VALIDATION_FAILED
+        conversionId:
+          type: integer
+          description: The conversion ID of the video export task
       type: object
       required:
-      - err
-    CallbackWebhook:
-      properties:
-        url:
-          format: url
-          type: string
-          description: Webhook URL. Must be in https protocol.
-        secret:
-          pattern: ^[0-9A-Za-z]{64}$
-          type: string
-          minLength: 64
-          maxLength: 64
-          description: Webhook secret for [signing the webhook event request by Vyond](#tag/Webhook/Verifying-Vyond-Signatures). If not provided, there is no signature in request. The secret should be in length 64 and contains only digits and English alphabets.
-      type: object
-      required:
-      - url
+      - conversionId
   securitySchemes:
     bearer:
       type: http
