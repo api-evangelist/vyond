@@ -540,193 +540,16 @@ paths:
       description: Get SCIM schema by ID
 components:
   schemas:
-    ScimEmailObjectWithOptionalAttributes:
+    ScimEnterpriseUser:
       properties:
-        value:
-          format: email
-          type: string
-          description: The email address.
-          example: john.doe@example.com
-        type:
-          enum:
-          - work
-          type: string
-          description: A label indicating the function of the email address. Only "work" is supported.
-        primary:
-          type: boolean
-          description: Whether the email address is primary. Always true.
-      type: object
-      required:
-      - value
-    ScimSchemaWithMeta:
-      properties:
-        schemas:
-          items:
-            type: string
-          type: array
-          description: The URIs of the SCIM schemas.
-          example:
-          - urn:ietf:params:scim:schemas:core:2.0:Schema
-        meta:
-          $ref: '#/components/schemas/ScimSchemaMetaObject'
-          type: object
-          description: Metadata object.
-        id:
-          type: string
-          description: Schema ID.
-        name:
-          type: string
-          description: Name of the schema.
-        description:
-          type: string
-          description: Description of the schema.
-        attributes:
-          items:
-            $ref: '#/components/schemas/ScimSchemaAttribute'
-          type: array
-          description: Attributes of the schema.
-      type: object
-      required:
-      - schemas
-      - meta
-      - id
-      - name
-      - description
-      - attributes
-    ScimVyondUserWithOptionalAttributes:
-      properties:
-        subscription:
-          $ref: '#/components/schemas/ScimSubscriptionObject'
-          type: object
-          description: The components of subscription.
-      type: object
-    ValidationDetail:
-      properties:
-        property:
-          type: string
-          description: The property that failed validation
-        message:
-          items:
-            type: string
-          type: array
-          description: Validation error messages for the property
-      type: object
-      required:
-      - property
-      - message
-    ScimSchemaMetaObject:
-      properties:
-        resourceType:
-          type: string
-          enum:
-          - Schema
-          description: Resource type
-      type: object
-      required:
-      - resourceType
-    ApiErrorResponse:
-      properties:
-        err:
-          type: string
-          description: Error code identifying the specific error
-        reason:
-          type: string
-          description: Additional reason describing why the error occurred
-        message:
-          type: string
-          description: Error message, used as an alternative to reason for non-enumerated error messages
-        scimType:
-          type: string
-          description: SCIM error type, present on SCIM 409 Conflict responses (e.g. uniqueness)
-        details:
-          items:
-            $ref: '#/components/schemas/ValidationDetail'
-          type: array
-          description: Validation error details, present when err is REQUEST_VALIDATION_FAILED
-      type: object
-      required:
-      - err
-    ScimNameObject:
-      properties:
-        givenName:
+        organization:
           minLength: 1
           type: string
-          description: The user's first name.
-          example: John
-        familyName:
-          minLength: 1
-          type: string
-          description: The user's last name.
-          example: Doe
+          description: Organization to which the user belongs.
+          example: Organization Name
       type: object
       required:
-      - givenName
-      - familyName
-    ScimPatchOperationObject:
-      properties:
-        op:
-          enum:
-          - add
-          - remove
-          - replace
-          type: string
-          description: The operation to perform.
-        path:
-          type: string
-          description: The path to target attribute.
-        value:
-          description: The value to be added/replaced.
-      type: object
-      required:
-      - op
-      - value
-    ScimAddressObjectWithOptionalAttributes:
-      properties:
-        country:
-          type: string
-          description: The country code in ISO31661 Alpha2 format.
-          example: US
-        type:
-          enum:
-          - work
-          type: string
-          description: A label indicating the function of the address. Only "work" is supported.
-        primary:
-          type: boolean
-          description: Whether the address is primary. Always true.
-      type: object
-      required:
-      - country
-    ScimEmailObject:
-      properties:
-        value:
-          format: email
-          type: string
-          description: The email address.
-          example: john.doe@example.com
-        type:
-          enum:
-          - work
-          type: string
-          description: A label indicating the function of the email address. Only "work" is supported.
-        primary:
-          type: boolean
-          description: Whether the email address is primary. Always true.
-      type: object
-      required:
-      - value
-      - type
-      - primary
-    ScimSubscriptionObject:
-      properties:
-        value:
-          minLength: 1
-          type: string
-          description: Vyond subscription ID.
-          example: '{vyondSubscriptionId}'
-      type: object
-      required:
-      - value
+      - organization
     ScimUserList:
       properties:
         Resources:
@@ -799,6 +622,37 @@ components:
       - totalResults
       - startIndex
       - itemsPerPage
+    ScimVyondUser:
+      properties:
+        subscription:
+          $ref: '#/components/schemas/ScimSubscriptionObject'
+          type: object
+          description: The components of subscription.
+      type: object
+      required:
+      - subscription
+    ApiErrorResponse:
+      properties:
+        err:
+          type: string
+          description: Error code identifying the specific error
+        reason:
+          type: string
+          description: Additional reason describing why the error occurred
+        message:
+          type: string
+          description: Error message, used as an alternative to reason for non-enumerated error messages
+        scimType:
+          type: string
+          description: SCIM error type, present on SCIM 409 Conflict responses (e.g. uniqueness)
+        details:
+          items:
+            $ref: '#/components/schemas/ValidationDetail'
+          type: array
+          description: Validation error details, present when err is REQUEST_VALIDATION_FAILED
+      type: object
+      required:
+      - err
     ScimUser:
       properties:
         emails:
@@ -855,22 +709,85 @@ components:
       - name
       - active
       - urn:ietf:params:scim:schemas:extension:enterprise:2.0:User
-    ScimUserMetaObject:
+    ScimEmailObjectWithOptionalAttributes:
       properties:
-        resourceType:
+        value:
+          format: email
           type: string
+          description: The email address.
+          example: john.doe@example.com
+        type:
           enum:
-          - User
-          description: Resource type
-        created:
-          pattern: \d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d.\d+Z?
+          - work
           type: string
-          description: Creation time
-          example: '2024-09-24T04:19:34.928Z'
+          description: A label indicating the function of the email address. Only "work" is supported.
+        primary:
+          type: boolean
+          description: Whether the email address is primary. Always true.
       type: object
       required:
-      - resourceType
-      - created
+      - value
+    ScimPatchOp:
+      properties:
+        schemas:
+          items:
+            type: string
+          type: array
+          description: The URIs of the SCIM schemas.
+          example:
+          - urn:ietf:params:scim:api:messages:2.0:PatchOp
+        Operations:
+          items:
+            $ref: '#/components/schemas/ScimPatchOperationObject'
+          type: array
+          description: Patch operations
+          example:
+          - op: replace
+            path: userName
+            value: john.doe@example.com
+          - op: replace
+            path: emails[primary eq true].value
+            value: john.doe@example.com
+      type: object
+      required:
+      - schemas
+      - Operations
+    ScimEmailObject:
+      properties:
+        value:
+          format: email
+          type: string
+          description: The email address.
+          example: john.doe@example.com
+        type:
+          enum:
+          - work
+          type: string
+          description: A label indicating the function of the email address. Only "work" is supported.
+        primary:
+          type: boolean
+          description: Whether the email address is primary. Always true.
+      type: object
+      required:
+      - value
+      - type
+      - primary
+    ScimNameObject:
+      properties:
+        givenName:
+          minLength: 1
+          type: string
+          description: The user's first name.
+          example: John
+        familyName:
+          minLength: 1
+          type: string
+          description: The user's last name.
+          example: Doe
+      type: object
+      required:
+      - givenName
+      - familyName
     ScimUserWithMeta:
       properties:
         meta:
@@ -938,50 +855,43 @@ components:
       - name
       - active
       - urn:ietf:params:scim:schemas:extension:enterprise:2.0:User
-    ScimPatchOp:
-      properties:
-        schemas:
-          items:
-            type: string
-          type: array
-          description: The URIs of the SCIM schemas.
-          example:
-          - urn:ietf:params:scim:api:messages:2.0:PatchOp
-        Operations:
-          items:
-            $ref: '#/components/schemas/ScimPatchOperationObject'
-          type: array
-          description: Patch operations
-          example:
-          - op: replace
-            path: userName
-            value: john.doe@example.com
-          - op: replace
-            path: emails[primary eq true].value
-            value: john.doe@example.com
-      type: object
-      required:
-      - schemas
-      - Operations
-    ScimEnterpriseUser:
-      properties:
-        organization:
-          minLength: 1
-          type: string
-          description: Organization to which the user belongs.
-          example: Organization Name
-      type: object
-      required:
-      - organization
-    ScimVyondUser:
+    ScimVyondUserWithOptionalAttributes:
       properties:
         subscription:
           $ref: '#/components/schemas/ScimSubscriptionObject'
           type: object
           description: The components of subscription.
       type: object
+    ScimUserMetaObject:
+      properties:
+        resourceType:
+          type: string
+          enum:
+          - User
+          description: Resource type
+        created:
+          pattern: \d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d.\d+Z?
+          type: string
+          description: Creation time
+          example: '2024-09-24T04:19:34.928Z'
+      type: object
       required:
-      - subscription
+      - resourceType
+      - created
+    ValidationDetail:
+      properties:
+        property:
+          type: string
+          description: The property that failed validation
+        message:
+          items:
+            type: string
+          type: array
+          description: Validation error messages for the property
+      type: object
+      required:
+      - property
+      - message
     ScimAddressObject:
       properties:
         country:
@@ -1001,6 +911,69 @@ components:
       - country
       - type
       - primary
+    ScimPatchOperationObject:
+      properties:
+        op:
+          enum:
+          - add
+          - remove
+          - replace
+          type: string
+          description: The operation to perform.
+        path:
+          type: string
+          description: The path to target attribute.
+        value:
+          description: The value to be added/replaced.
+      type: object
+      required:
+      - op
+      - value
+    ScimSchemaMetaObject:
+      properties:
+        resourceType:
+          type: string
+          enum:
+          - Schema
+          description: Resource type
+      type: object
+      required:
+      - resourceType
+    ScimSchemaWithMeta:
+      properties:
+        schemas:
+          items:
+            type: string
+          type: array
+          description: The URIs of the SCIM schemas.
+          example:
+          - urn:ietf:params:scim:schemas:core:2.0:Schema
+        meta:
+          $ref: '#/components/schemas/ScimSchemaMetaObject'
+          type: object
+          description: Metadata object.
+        id:
+          type: string
+          description: Schema ID.
+        name:
+          type: string
+          description: Name of the schema.
+        description:
+          type: string
+          description: Description of the schema.
+        attributes:
+          items:
+            $ref: '#/components/schemas/ScimSchemaAttribute'
+          type: array
+          description: Attributes of the schema.
+      type: object
+      required:
+      - schemas
+      - meta
+      - id
+      - name
+      - description
+      - attributes
     ScimSchemaAttribute:
       properties:
         name:
@@ -1073,6 +1046,33 @@ components:
       - mutability
       - returned
       - subAttributes
+    ScimSubscriptionObject:
+      properties:
+        value:
+          minLength: 1
+          type: string
+          description: Vyond subscription ID.
+          example: '{vyondSubscriptionId}'
+      type: object
+      required:
+      - value
+    ScimAddressObjectWithOptionalAttributes:
+      properties:
+        country:
+          type: string
+          description: The country code in ISO31661 Alpha2 format.
+          example: US
+        type:
+          enum:
+          - work
+          type: string
+          description: A label indicating the function of the address. Only "work" is supported.
+        primary:
+          type: boolean
+          description: Whether the address is primary. Always true.
+      type: object
+      required:
+      - country
   securitySchemes:
     bearer:
       type: http

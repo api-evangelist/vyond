@@ -217,71 +217,8 @@ paths:
       description: Delete an existing webhook
 components:
   schemas:
-    ApiErrorResponse:
+    Webhook:
       properties:
-        err:
-          type: string
-          description: Error code identifying the specific error
-        reason:
-          type: string
-          description: Additional reason describing why the error occurred
-        message:
-          type: string
-          description: Error message, used as an alternative to reason for non-enumerated error messages
-        scimType:
-          type: string
-          description: SCIM error type, present on SCIM 409 Conflict responses (e.g. uniqueness)
-        details:
-          items:
-            $ref: '#/components/schemas/ValidationDetail'
-          type: array
-          description: Validation error details, present when err is REQUEST_VALIDATION_FAILED
-      type: object
-      required:
-      - err
-    WebhookListResBody:
-      properties:
-        data:
-          items:
-            $ref: '#/components/schemas/Webhook'
-          type: array
-          description: List of webhooks
-      type: object
-      required:
-      - data
-    WebhookUpdateReqBody:
-      properties:
-        name:
-          type: string
-          description: Name of the webhook
-        url:
-          format: url
-          type: string
-          description: URL of the webhook, protocol must be https
-        events:
-          items:
-            enum:
-            - video_generation.succeeded
-            - video_generation.failed
-            - video_export.succeeded
-            - video_export.failed
-            - turbo_generation.succeeded
-            - turbo_generation.failed
-            type: string
-          type: array
-          description: Events that the webhook subscribed to
-        status:
-          type: string
-          enum:
-          - enabled
-          - disabled
-          description: Status of the webhook
-      type: object
-    WebhookWithSecret:
-      properties:
-        secret:
-          type: string
-          description: Secret of the webhook which is required to [verify signatures](#tag/Webhook/Verifying-Vyond-Signatures) from Vyond,             note that this secret is only available at time of webhook creation
         webhookId:
           type: string
           description: ID of the webhook
@@ -312,7 +249,6 @@ components:
           description: Status of the webhook
       type: object
       required:
-      - secret
       - webhookId
       - url
       - events
@@ -356,8 +292,11 @@ components:
       required:
       - url
       - events
-    Webhook:
+    WebhookWithSecret:
       properties:
+        secret:
+          type: string
+          description: Secret of the webhook which is required to [verify signatures](#tag/Webhook/Verifying-Vyond-Signatures) from Vyond,             note that this secret is only available at time of webhook creation
         webhookId:
           type: string
           description: ID of the webhook
@@ -388,10 +327,71 @@ components:
           description: Status of the webhook
       type: object
       required:
+      - secret
       - webhookId
       - url
       - events
       - status
+    WebhookListResBody:
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/Webhook'
+          type: array
+          description: List of webhooks
+      type: object
+      required:
+      - data
+    WebhookUpdateReqBody:
+      properties:
+        name:
+          type: string
+          description: Name of the webhook
+        url:
+          format: url
+          type: string
+          description: URL of the webhook, protocol must be https
+        events:
+          items:
+            enum:
+            - video_generation.succeeded
+            - video_generation.failed
+            - video_export.succeeded
+            - video_export.failed
+            - turbo_generation.succeeded
+            - turbo_generation.failed
+            type: string
+          type: array
+          description: Events that the webhook subscribed to
+        status:
+          type: string
+          enum:
+          - enabled
+          - disabled
+          description: Status of the webhook
+      type: object
+    ApiErrorResponse:
+      properties:
+        err:
+          type: string
+          description: Error code identifying the specific error
+        reason:
+          type: string
+          description: Additional reason describing why the error occurred
+        message:
+          type: string
+          description: Error message, used as an alternative to reason for non-enumerated error messages
+        scimType:
+          type: string
+          description: SCIM error type, present on SCIM 409 Conflict responses (e.g. uniqueness)
+        details:
+          items:
+            $ref: '#/components/schemas/ValidationDetail'
+          type: array
+          description: Validation error details, present when err is REQUEST_VALIDATION_FAILED
+      type: object
+      required:
+      - err
   securitySchemes:
     bearer:
       type: http
